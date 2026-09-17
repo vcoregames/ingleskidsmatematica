@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>🦉 InglêsKids - Aprenda Brincando!</title>
+<style>
+  :root{
+    --rosa:#ff6b9d; --azul:#4d96ff; --verde:#58cc02; --verde2:#4aa801;
+    --amarelo:#ffc800; --roxo:#9b5de5; --laranja:#ff9600; --vermelho:#ff4b4b;
+    --azulclaro:#ddf4ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Baloo 2','Comic Sans MS','Comic Sans',cursive,sans-serif;
+    background:linear-gradient(160deg,#e8f7ff,#fff3e0,#eaffe6);
+    min-height:100vh; user-select:none; padding-bottom:70px; overflow-x:hidden;
+  }
+  #fundo-animado{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .particula{position:absolute; bottom:-60px; font-size:28px; opacity:.45; animation:subir 5s linear forwards;}
+  @keyframes subir{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(-110vh) rotate(720deg)}}
+
+  #mascote{position:fixed; right:14px; bottom:14px; z-index:60; display:flex; flex-direction:column; align-items:center; pointer-events:none;}
+  #mascote .coruja{font-size:60px; animation:bob 2.5s ease-in-out infinite; filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-12px) rotate(4deg)}}
+  #mascote .fala{background:white; border-radius:14px; padding:6px 12px; font-size:14px; font-weight:bold; color:#555;
+    box-shadow:0 4px 10px rgba(0,0,0,.15); margin-bottom:4px; max-width:190px; text-align:center; display:none; animation:aparecer .3s;}
+  #mascote .fala.visivel{display:block;}
+
+  header{background:white; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; box-shadow:0 3px 12px rgba(0,0,0,.1); position:sticky; top:0; z-index:50;}
+  .logo{font-size:24px; font-weight:bold; color:var(--verde2); display:flex; align-items:center; gap:6px;}
+  .logo .mascote-mini{font-size:32px; animation:bob 2s ease-in-out infinite;}
+  .stats{display:flex; gap:10px; align-items:center; font-weight:bold; flex-wrap:wrap;}
+  .stat{background:#f3f3f3; border-radius:30px; padding:6px 14px; font-size:16px;}
+  #btn-som, #btn-reset{border:none; background:#f3f3f3; border-radius:50%; width:40px; height:40px; font-size:18px; cursor:pointer; transition:transform .2s;}
+  #btn-som:hover, #btn-reset:hover{transform:rotate(20deg) scale(1.1);}
+  #btn-reset{background:#ffe3e3;}
+
+  .btn{border:none; border-radius:16px; padding:12px 20px; font-size:18px; font-weight:bold; cursor:pointer;
+    color:white; font-family:inherit; box-shadow:0 4px 0 rgba(0,0,0,.18); transition:transform .08s, box-shadow .08s, filter .15s; display:inline-flex; align-items:center; gap:6px;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.18);}
+  .btn-verde{background:var(--verde);} .btn-azul{background:var(--azul);}
+  .btn-roxo{background:var(--roxo);} .btn-laranja{background:var(--laranja);}
+  .btn-matematica{background:linear-gradient(135deg,#ff5c8a,#ff9600);}
+  .btn-grande{padding:16px 34px; font-size:22px; animation:brilho 2s ease-in-out infinite;}
+  @keyframes brilho{0%,100%{box-shadow:0 4px 0 rgba(0,0,0,.18)}50%{box-shadow:0 4px 18px rgba(88,204,2,.7)}}
+  .btn-mini{border:none; background:#eee; border-radius:10px; padding:6px 10px; font-size:16px; cursor:pointer; font-family:inherit;}
+
+  .tela{display:none; animation:aparecer 0.4s ease; max-width:760px; margin:0 auto; padding:16px;}
+  .tela.ativa{display:block;}
+  @keyframes aparecer{from{opacity:0; transform:translateY(22px) scale(.98)}to{opacity:1; transform:none}}
+
+  .overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:200; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .overlay .card-nome{background:white; border-radius:28px; padding:30px; max-width:400px; width:100%; box-shadow:0 6px 18px rgba(0,0,0,.2);}
+  .card-nome h2{font-size:28px; margin-bottom:10px; color:#333;}
+  .card-nome input{width:100%; padding:14px; font-size:20px; border:3px solid #ccc; border-radius:16px; text-align:center; font-family:inherit; outline:none; margin-top:14px; color:#555;}
+
+  .painel-usuario{background:white; border-radius:22px; padding:16px; margin-bottom:14px; box-shadow:0 4px 14px rgba(0,0,0,.1); font-size:20px;}
+  .nivel{font-weight:bold; color:var(--roxo); font-size:18px; margin-top:4px;}
+  .barra-xp{background:#eee; height:18px; border-radius:10px; overflow:hidden; margin-top:8px;}
+  .barra-xp div{height:100%; background:linear-gradient(90deg,#58cc02,#a4e442); width:0; transition:width .5s; border-radius:10px;}
+  .xp-texto{font-size:13px; color:#888; font-weight:bold; margin-top:3px;}
+  .meta{font-size:14px; color:#e07000; font-weight:bold; margin-top:6px;}
+  .abas-unidades{display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px;}
+  .aba{flex:0 0 auto; background:white; border:3px solid transparent; border-radius:20px; padding:8px 14px; font-size:15px; font-weight:bold; cursor:pointer; font-family:inherit; color:#555; transition:transform .15s;}
+  .aba:hover{transform:scale(1.06);}
+  .aba.ativa{background:#fff8e1;}
+  .caminho{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;}
+  .no{background:white; border-radius:18px; padding:16px; text-align:center; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.1); border-bottom:6px solid var(--cor,#58cc02); transition:transform .15s;}
+  .no:hover{transform:translateY(-4px) scale(1.03);}
+  .no.bloqueado{filter:grayscale(.7); opacity:.65; cursor:not-allowed;}
+  .no-emoji{font-size:42px;}
+  .no-titulo{font-weight:bold; margin-top:6px; color:#555;}
+  .no-coroas{margin-top:6px; font-size:14px; color:#aaa;}
+  .no-coroas .cir{color:#ddd;}
+
+  .barra-topo{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .barra-topo button{border:none; background:white; width:38px; height:38px; border-radius:12px; font-size:18px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15); color:#888;}
+  .barra-progresso{flex:1; background:#e0e0e0; height:16px; border-radius:10px; overflow:hidden;}
+  .barra-progresso div{height:100%; background:linear-gradient(90deg,#4d96ff,#8fc1ff); width:0; transition:width .4s; border-radius:10px;}
+  .corao-licao{font-weight:bold; font-size:18px;}
+  .intro-card{background:white; border-radius:24px; padding:24px; box-shadow:0 6px 16px rgba(0,0,0,.12);}
+  .intro-card h2{text-align:center; font-size:28px; color:#555;}
+  .intro-sub{text-align:center; color:#999; font-weight:bold; margin:6px 0 14px;}
+  .lista-palavras{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-bottom:18px;}
+  .item-palavra{background:#f7f7f7; border-radius:14px; padding:12px; text-align:center;}
+  .item-palavra .emoji{font-size:30px; display:block;}
+  .item-palavra .en{font-weight:bold; color:var(--azul); display:block; margin-top:4px;}
+  .item-palavra .pt{color:#888; font-size:14px; display:block;}
+  .item-palavra button{margin-top:6px;}
+
+  .ex-titulo{font-size:26px; font-weight:bold; color:#555; text-align:center; margin-bottom:8px;}
+  .ex-emoji{font-size:70px; text-align:center; margin:12px 0;}
+  .ex-dica{text-align:center; font-size:22px; color:#888; font-weight:bold; margin-bottom:8px;}
+  .opcoes{display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:520px; margin:20px auto; padding:0 10px;}
+  @media(max-width:480px){.opcoes{grid-template-columns:1fr;}}
+  .opcao{padding:16px; font-size:22px; font-weight:bold; border-radius:18px; border:3px solid #e5e5e5; background:white; cursor:pointer; transition:all .15s; font-family:inherit; color:#555;}
+  .opcao:hover{border-color:var(--azul); background:var(--azulclaro); transform:scale(1.04);}
+  .opcao.certa{border-color:var(--verde); background:#dff7e3; color:#2e7d32; animation:pulo .4s;}
+  .opcao.errada{border-color:var(--vermelho); background:#ffe0e0; color:#b33; animation:tremer .3s;}
+  @keyframes pulo{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  @keyframes tremer{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  .area-escrever{display:flex; gap:10px; justify-content:center; align-items:center; max-width:480px; margin:16px auto;}
+  .area-escrever input{flex:1; padding:14px; font-size:22px; border:3px solid #ddd; border-radius:16px; font-family:inherit; outline:none; text-align:center; color:#555;}
+  .msg-write{margin-top:8px; font-weight:bold; font-size:20px; text-align:center; min-height:24px; color:#333;}
+
+  /* MIC */
+  .mic-area{text-align:center; margin:16px 0;}
+  .btn-mic{width:110px; height:110px; border-radius:50%; border:6px solid var(--azul); background:white; font-size:50px; cursor:pointer; transition:transform .15s, background .2s;}
+  .btn-mic:hover{transform:scale(1.06);}
+  .btn-mic.ouvindo{background:var(--vermelho); border-color:var(--vermelho); animation:pulsarMic 1s infinite;}
+  .btn-mic.ouvindo .icone-mic{color:white;}
+  @keyframes pulsarMic{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  .mic-status{margin-top:10px; font-weight:bold; color:#888; min-height:24px;}
+  .mic-status.ativo{color:var(--vermelho);}
+  .palavra-ouvida{margin-top:6px; font-size:18px; color:#555; font-weight:bold;}
+
+  .frase-card{background:white; border-radius:24px; padding:20px; box-shadow:0 6px 16px rgba(0,0,0,.12);}
+  .contador-frases{text-align:center; color:#999; font-weight:bold; margin-bottom:12px;}
+  .bolha{background:#f0f6ff; border-radius:18px; padding:14px; margin-bottom:14px;}
+  .bolha-quem{font-weight:bold; color:#888; margin-bottom:4px;}
+  .bolha-texto{font-size:22px; font-weight:bold; color:#333;}
+  .bolha-pt{color:#999; font-size:15px; margin-top:4px;}
+  .opcoes-frase{grid-template-columns:1fr !important; max-width:560px;}
+  .opcoes-frase .opcao{font-size:17px; padding:14px 16px; text-align:center; word-break:break-word;}
+
+  .balao-topo{display:flex; align-items:center; justify-content:space-between; padding:6px 8px;}
+  .btn-sair-balao{border:none; background:#fff; width:36px; height:36px; border-radius:12px; font-size:18px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15); color:#888;}
+  .balao-info{display:flex; gap:14px; font-weight:bold; font-size:20px;}
+  .balao-pontos{color:var(--verde);} .balao-tempo{color:var(--azul);}
+  .balao-alvo{text-align:center; margin:10px; padding:12px; border-radius:20px; background:#fff; box-shadow:0 4px 14px rgba(0,0,0,.2); font-size:20px; font-weight:bold; color:#555;}
+  .area-baloes{height:58vh; min-height:300px; overflow:hidden; position:relative; background:linear-gradient(180deg,#a8d8ff,#eaf7ff); margin:0 6px; border-radius:12px;}
+  .balao{position:absolute; bottom:0; width:84px; height:112px; cursor:pointer; display:flex; flex-direction:column; align-items:center; font-weight:bold; font-size:13px;}
+  .balao .corpo{width:84px; height:96px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%; display:flex; align-items:center; justify-content:center; color:#fff; padding:8px; font-weight:bold; word-break:break-word; box-shadow:0 3px 8px rgba(0,0,0,.15); text-align:center; text-shadow:0 1px 2px rgba(0,0,0,.3);}
+  .balao.corte{animation:estourar 0.35s forwards;}
+  @keyframes estourar{0%{transform:scale(1)}100%{transform:scale(2); opacity:0}}
+  .balao.treme{animation:tremer 0.3s;}
+
+  .fim-card, .fim-balao{background:white; border-radius:26px; padding:24px; margin:10px auto; text-align:center; max-width:400px; box-shadow:0 8px 20px rgba(0,0,0,.2);}
+  .trofeu{font-size:70px;}
+
+  .grade-badges{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px;}
+  .badge{background:white; border-radius:18px; padding:14px; text-align:center; box-shadow:0 3px 10px rgba(0,0,0,.1); opacity:.5; filter:grayscale(.6);}
+  .badge.ok{opacity:1; filter:none;}
+  .badge-emoji{font-size:40px;}
+  .badge-nome{font-weight:bold; color:#555; margin-top:4px;}
+  .badge-desc{font-size:12px; color:#999;}
+
+  .confete{position:fixed; top:-50px; z-index:999; pointer-events:none; animation:cair linear forwards;}
+  @keyframes cair{to{transform:translateY(110vh) rotate(720deg); opacity:.4;}}
+  .burst{position:fixed; font-size:24px; pointer-events:none; z-index:999; animation:estourar-emoji 0.7s ease-out forwards;}
+  @keyframes estourar-emoji{0%{transform:translate(0,0) scale(1); opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0); opacity:0;}}
+  .toast{position:fixed; top:70px; left:50%; transform:translateX(-50%) translateY(-20px); background:#333; color:white; padding:12px 22px; border-radius:30px; font-weight:bold; z-index:300; opacity:0; transition:all .35s; font-size:16px;}
+  .toast.visivel{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* ===================== MATEMÁTICA ===================== */
+  .grade-math-menu{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:16px;}
+  .cartao-math{border:none; border-radius:22px; padding:22px 14px; cursor:pointer; color:#fff; font-weight:bold; font-size:17px; font-family:inherit; box-shadow:0 6px 16px rgba(0,0,0,.15); transition:transform .15s; text-align:center;}
+  .cartao-math:active{transform:scale(.95);}
+  .cartao-math .icone-math{font-size:44px; display:block; margin-bottom:8px;}
+  .cartao-math .desc-math{display:block; font-size:12px; font-weight:600; opacity:.92; margin-top:4px;}
+  .cartao-math.largo{grid-column:span 2;}
+
+  .math-voltar{margin-bottom:10px;}
+  .titulo-math{font-weight:bold; font-size:20px; text-align:center; color:#555; margin-bottom:14px;}
+  .math-cartao{background:white; border-radius:22px; padding:20px; box-shadow:0 6px 16px rgba(0,0,0,.12); margin-bottom:16px;}
+
+  .grade-tabuada{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:20px;}
+  .btn-num{border:none; border-radius:16px; padding:14px 0; font-size:22px; font-weight:bold; cursor:pointer; color:#fff; font-family:inherit; box-shadow:0 4px 12px rgba(0,0,0,.15); transition:transform .12s;}
+  .btn-num:active{transform:scale(.9);}
+  .cor-n1{background:#ff6b9d;} .cor-n2{background:#ff9600;} .cor-n3{background:#ffc800;color:#6b5200;}
+  .cor-n4{background:#58cc02;} .cor-n5{background:#4d96ff;} .cor-n6{background:#9b5de5;}
+  .cor-n7{background:#00b8b8;} .cor-n8{background:#ff6b9d;} .cor-n9{background:#3ddc84;} .cor-n10{background:#ff8a5c;}
+
+  .linha-tabuada{display:flex; justify-content:space-between; align-items:center; padding:9px 14px; border-radius:12px; font-weight:bold; font-size:18px; color:#555;}
+  .linha-tabuada:nth-child(odd){background:#f5f7ff;}
+  .res-tabuada{color:#4d96ff; font-weight:bold;}
+
+  .grade-operacao{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
+  .btn-operacao{border:none; border-radius:18px; padding:18px; font-size:40px; font-weight:bold; cursor:pointer; color:#fff; font-family:inherit; box-shadow:0 5px 14px rgba(0,0,0,.15); transition:transform .12s;}
+  .btn-operacao:active{transform:scale(.94);}
+  .btn-operacao span{display:block; font-size:14px; font-weight:bold; margin-top:4px;}
+
+  .pergunta-math{text-align:center; font-size:46px; font-weight:bold; margin:18px 0; color:#555; letter-spacing:2px;}
+  .placar-math{display:flex; justify-content:center; gap:26px; margin:14px 0; font-weight:bold; font-size:18px; color:#555;}
+  .placar-math .verde{color:#2e7d32;} .placar-math .verm{color:#b33;}
+
+  .timer-math{text-align:center; font-size:52px; font-weight:bold; color:#4d96ff; margin:8px 0;}
+  .timer-math.urgente{color:#ff4b4b; animation:pulsarT 0.6s infinite;}
+  @keyframes pulsarT{50%{transform:scale(1.12);}}
+
+  .grade-memoria{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:480px; margin:0 auto;}
+  .carta-memoria{border:none; border-radius:14px; aspect-ratio:1/1.1; cursor:pointer; font-weight:bold; font-size:16px; font-family:inherit; background:linear-gradient(135deg,#9b5de5,#4d96ff); color:#fff; box-shadow:0 4px 10px rgba(0,0,0,.15); transition:transform .2s; padding:6px; word-break:break-word;}
+  .carta-memoria.virada{background:white; color:#333; border:3px solid #4d96ff;}
+  .carta-memoria.combinada{background:linear-gradient(135deg,#58cc02,#a4e442); color:#1b5e20; border:3px solid #58cc02; pointer-events:none;}
+
+  .cartao-licao-mat{background:white; border-radius:20px; padding:18px; margin-bottom:14px; box-shadow:0 5px 14px rgba(0,0,0,.1); cursor:pointer; border-left:6px solid var(--cor-licao,#4d96ff); transition:transform .15s;}
+  .cartao-licao-mat:active{transform:scale(.98);}
+  .cartao-licao-mat .titulo-licao-mat{font-weight:bold; font-size:19px; color:#555; display:flex; align-items:center; gap:8px;}
+  .cartao-licao-mat .resumo-licao-mat{color:#999; font-size:14px; margin-top:5px;}
+
+  .conteudo-licao-mat{background:white; border-radius:20px; padding:22px; box-shadow:0 6px 16px rgba(0,0,0,.1); line-height:1.7; color:#555;}
+  .conteudo-licao-mat h3{margin:16px 0 8px;}
+  .exemplo-mat{background:#f5f7ff; border-radius:12px; padding:14px; margin:10px 0; text-align:center; font-size:22px; font-weight:bold; color:#4d96ff;}
+  .dica-mat{background:#fff8e1; border-radius:12px; padding:12px 14px; margin:10px 0; font-size:15px; border-left:4px solid #ffc800;}
+</style>
+</head>
+<body>
+
+<div id="fundo-animado"></div>
+<div id="mascote">
+  <div class="fala" id="mascote-fala"></div>
+  <div class="coruja">🦉</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="overlay-nome" style="display:flex;">
+  <div class="card-nome">
+    <h2>🦉 Olá! Qual é o seu nome?</h2>
+    <input type="text" id="input-nome" placeholder="Digite seu nome..." maxlength="20"/>
+    <button class="btn btn-verde btn-grande" style="margin-top:16px; width:100%;" onclick="guardarNome()">🚀 Começar</button>
+  </div>
+</div>
+
+<header>
+  <div class="logo"><span class="mascote-mini">🦉</span> InglêsKids</div>
+  <div class="stats">
+    <div class="stat" id="stat-streak">🔥 0</div>
+    <div class="stat" id="stat-xp">⚡ 0</div>
+    <div class="stat" id="stat-hearts">❤️ 5</div>
+    <button id="btn-som" onclick="alternarSom()">🔊</button>
+    <button id="btn-reset" onclick="resetaTudo()" title="Reiniciar tudo">🔄</button>
+  </div>
+</header>
+
+<div class="tela ativa" id="tela-home">
+  <div class="painel-usuario">
+    <div>Oi, <b id="nome-display">amiguinho</b>! 👋</div>
+    <div class="nivel" id="nivel">Nível 1</div>
+    <div class="barra-xp"><div id="xp-barra"></div></div>
+    <div class="xp-texto" id="xp-texto">0 / 50 XP</div>
+    <div class="meta">🎯 Meta diária: <span id="meta-diaria">0/30 XP</span></div>
+    <div id="aviso-corao" style="margin-top:8px;font-weight:bold;font-size:14px;color:#e07000;"></div>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px;">
+    <button class="btn btn-laranja" onclick="iniciarDesafio()">⏱️ Desafio</button>
+    <button class="btn btn-verde" onclick="iniciarBaloes()">🎈 Balões</button>
+    <button class="btn btn-azul" onclick="abrirFrases()">💬 Frases</button>
+    <button class="btn btn-matematica" onclick="abrirMatematica()">🧮 Matemática</button>
+    <button class="btn btn-roxo" onclick="mostrarConquistas()">🏅 Conquistas</button>
+  </div>
+  <div class="abas-unidades" id="abas-unidades"></div>
+  <div class="caminho" id="caminho"></div>
+</div>
+
+<div class="tela" id="tela-licao">
+  <div class="barra-topo">
+    <button onclick="sairLicao()">✖</button>
+    <div class="barra-progresso"><div id="progresso-licao"></div></div>
+    <div class="corao-licao" id="corao-licao">❤️ 5</div>
+  </div>
+  <div id="licao-conteudo"></div>
+</div>
+
+<div class="tela" id="tela-badges">
+  <div style="text-align:left;padding:6px;"><button class="btn-sair-balao" onclick="mostrarTela('tela-home');renderHome();">✖</button></div>
+  <h1 style="text-align:center; font-size:30px; color:#555; margin:8px 0;">🏅 Conquistas</h1>
+  <div class="grade-badges" id="badge-levels"></div>
+</div>
+
+<div class="tela" id="tela-frases">
+  <div style="text-align:left;padding:6px;"><button class="btn-sair-balao" onclick="mostrarTela('tela-home');renderHome();">✖</button></div>
+  <h1 style="text-align:center; font-size:28px; color:#555;">💬 Frases do Dia a Dia</h1>
+  <div id="frase-conteudo"></div>
+</div>
+
+<div class="tela" id="tela-baloes">
+  <div class="balao-topo">
+    <button class="btn-sair-balao" onclick="sairBaloes()">✖</button>
+    <div class="balao-info">
+      <div class="balao-pontos" id="baloes-pontos">⭐ 0</div>
+      <div class="balao-tempo" id="baloes-tempo">⏱️ 60s</div>
+    </div>
+  </div>
+  <div class="balao-alvo" id="baloes-alvo">🎈</div>
+  <div class="area-baloes" id="area-baloes"></div>
+</div>
+
+<div class="tela" id="tela-desafio">
+  <div class="barra-topo">
+    <button onclick="sairDesafio()">✖</button>
+    <div class="balao-info" style="flex:1; justify-content:center;">
+      <div class="balao-tempo" id="desafio-tempo">⏱️ 60s</div>
+      <div class="balao-pontos" id="desafio-pontos">⭐ 0</div>
+    </div>
+  </div>
+  <div id="desafio-conteudo"></div>
+</div>
+
+<!-- ===================== TELA MATEMÁTICA ===================== -->
+<div class="tela" id="tela-matematica">
+  <div style="text-align:left;padding:6px;"><button class="btn-sair-balao" onclick="sairMatematica()">✖</button></div>
+  <h1 style="text-align:center;font-size:28px;color:#555;">🧮 Matemática Divertida</h1>
+  <div id="math-conteudo"></div>
+</div>
+
+<script>
+/* ===================== DADOS ===================== */
+const UNIDADES = [
+  {id:1, titulo:'Primeiras Palavras', emoji:'🌱', cor:'#58cc02'},
+  {id:2, titulo:'Família e Casa', emoji:'🏠', cor:'#ff9600'},
+  {id:3, titulo:'Comida e Natureza', emoji:'🍎', cor:'#ff6b9d'},
+  {id:4, titulo:'Corpo e Roupas', emoji:'👕', cor:'#4d96ff'},
+  {id:5, titulo:'Escola e Transporte', emoji:'🚌', cor:'#9b5de5'},
+  {id:6, titulo:'Ações e Sentimentos', emoji:'🎭', cor:'#ffc800'},
+  {id:7, titulo:'Formas, Dias e Clima', emoji:'🌦️', cor:'#00b8b8'},
+  {id:8, titulo:'Lugares', emoji:'🏙️', cor:'#ff8a5c'},
+  {id:9, titulo:'Comida e Bebida', emoji:'🥤', cor:'#6bcb77'},
+  {id:10, titulo:'Esportes e Hobbies', emoji:'⚽', cor:'#ff9600'},
+  {id:11, titulo:'Profissões', emoji:'👷', cor:'#4d96ff'},
+  {id:12, titulo:'Tempo e Datas', emoji:'⏰', cor:'#9b5de5'},
+  {id:13, titulo:'Adjetivos', emoji:'🌟', cor:'#ff6b9d'},
+  {id:14, titulo:'Preposições', emoji:'📍', cor:'#00b8b8'},
+  {id:15, titulo:'Animais do Mundo', emoji:'🐠', cor:'#58cc02'},
+  {id:16, titulo:'Música', emoji:'🎵', cor:'#9b5de5'},
+  {id:17, titulo:'Tecnologia', emoji:'💻', cor:'#4d96ff'},
+  {id:18, titulo:'Festas', emoji:'🎉', cor:'#ff6b9d'},
+  {id:19, titulo:'Mais Verbos', emoji:'🏃', cor:'#ff9600'},
+  {id:20, titulo:'Frases do Dia', emoji:'💬', cor:'#ffc800'},
+];
+
+const LICOES = [
+  {id:'saudacoes', unidade:1, titulo:'Saudações', emoji:'👋', cor:'#58cc02', palavras:[
+    {en:'hello',pt:'olá',emoji:'👋'},{en:'hi',pt:'oi',emoji:'🙋'},{en:'good morning',pt:'bom dia',emoji:'🌅'},{en:'good afternoon',pt:'boa tarde',emoji:'🌇'},
+    {en:'good night',pt:'boa noite',emoji:'🌙'},{en:'goodbye',pt:'tchau',emoji:'👋'},{en:'please',pt:'por favor',emoji:'🙏'},{en:'thank you',pt:'obrigado',emoji:'🙏'}]},
+  {id:'cores', unidade:1, titulo:'Cores', emoji:'🎨', cor:'#4d96ff', palavras:[
+    {en:'red',pt:'vermelho',emoji:'🔴'},{en:'blue',pt:'azul',emoji:'🔵'},{en:'green',pt:'verde',emoji:'🟢'},{en:'yellow',pt:'amarelo',emoji:'🟡'},
+    {en:'orange',pt:'laranja',emoji:'🟠'},{en:'purple',pt:'roxo',emoji:'🟣'},{en:'pink',pt:'rosa',emoji:'🌸'},{en:'black',pt:'preto',emoji:'⚫'},{en:'white',pt:'branco',emoji:'⚪'}]},
+  {id:'numeros', unidade:1, titulo:'Números', emoji:'🔢', cor:'#6bcb77', palavras:[
+    {en:'one',pt:'um',emoji:'1️⃣'},{en:'two',pt:'dois',emoji:'2️⃣'},{en:'three',pt:'três',emoji:'3️⃣'},{en:'four',pt:'quatro',emoji:'4️⃣'},
+    {en:'five',pt:'cinco',emoji:'5️⃣'},{en:'six',pt:'seis',emoji:'6️⃣'},{en:'seven',pt:'sete',emoji:'7️⃣'},{en:'eight',pt:'oito',emoji:'8️⃣'},
+    {en:'nine',pt:'nove',emoji:'9️⃣'},{en:'ten',pt:'dez',emoji:'🔟'}]},
+  {id:'animais', unidade:1, titulo:'Animais', emoji:'🐾', cor:'#ff6b9d', palavras:[
+    {en:'dog',pt:'cachorro',emoji:'🐶'},{en:'cat',pt:'gato',emoji:'🐱'},{en:'bird',pt:'pássaro',emoji:'🐦'},{en:'fish',pt:'peixe',emoji:'🐟'},
+    {en:'horse',pt:'cavalo',emoji:'🐴'},{en:'rabbit',pt:'coelho',emoji:'🐰'},{en:'lion',pt:'leão',emoji:'🦁'},{en:'monkey',pt:'macaco',emoji:'🐵'}]},
+  {id:'familia', unidade:2, titulo:'Família', emoji:'👨‍👩‍👧‍👦', cor:'#ff9600', palavras:[
+    {en:'mother',pt:'mãe',emoji:'👩'},{en:'father',pt:'pai',emoji:'👨'},{en:'brother',pt:'irmão',emoji:'👦'},{en:'sister',pt:'irmã',emoji:'👧'},
+    {en:'grandmother',pt:'avó',emoji:'👵'},{en:'grandfather',pt:'avô',emoji:'👴'},{en:'baby',pt:'bebê',emoji:'👶'},{en:'friend',pt:'amigo',emoji:'🧑‍🤝‍🧑'}]},
+  {id:'casa', unidade:2, titulo:'Casa', emoji:'🏠', cor:'#ff9600', palavras:[
+    {en:'house',pt:'casa',emoji:'🏠'},{en:'door',pt:'porta',emoji:'🚪'},{en:'window',pt:'janela',emoji:'🪟'},{en:'bed',pt:'cama',emoji:'🛏️'},
+    {en:'chair',pt:'cadeira',emoji:'🪑'},{en:'table',pt:'mesa',emoji:'🍽️'},{en:'kitchen',pt:'cozinha',emoji:'🍳'},{en:'bathroom',pt:'banheiro',emoji:'🛁'}]},
+  {id:'brinquedos', unidade:2, titulo:'Brinquedos', emoji:'🧸', cor:'#ffc800', palavras:[
+    {en:'ball',pt:'bola',emoji:'⚽'},{en:'doll',pt:'boneca',emoji:'🪆'},{en:'car',pt:'carro',emoji:'🚗'},{en:'kite',pt:'pipa',emoji:'🪁'},
+    {en:'puzzle',pt:'quebra-cabeça',emoji:'🧩'},{en:'teddy bear',pt:'ursinho',emoji:'🧸'},{en:'bike',pt:'bicicleta',emoji:'🚲'},{en:'game',pt:'jogo',emoji:'🎮'}]},
+  {id:'frutas', unidade:3, titulo:'Frutas', emoji:'🍉', cor:'#ff6b9d', palavras:[
+    {en:'apple',pt:'maçã',emoji:'🍎'},{en:'banana',pt:'banana',emoji:'🍌'},{en:'orange',pt:'laranja',emoji:'🍊'},{en:'grape',pt:'uva',emoji:'🍇'},
+    {en:'strawberry',pt:'morango',emoji:'🍓'},{en:'watermelon',pt:'melancia',emoji:'🍉'},{en:'pineapple',pt:'abacaxi',emoji:'🍍'},{en:'mango',pt:'manga',emoji:'🥭'}]},
+  {id:'comida', unidade:3, titulo:'Comida', emoji:'🍽️', cor:'#ff9600', palavras:[
+    {en:'bread',pt:'pão',emoji:'🍞'},{en:'cheese',pt:'queijo',emoji:'🧀'},{en:'milk',pt:'leite',emoji:'🥛'},{en:'egg',pt:'ovo',emoji:'🥚'},
+    {en:'rice',pt:'arroz',emoji:'🍚'},{en:'chicken',pt:'frango',emoji:'🍗'},{en:'cake',pt:'bolo',emoji:'🎂'},{en:'juice',pt:'suco',emoji:'🧃'}]},
+  {id:'natureza', unidade:3, titulo:'Natureza', emoji:'🌳', cor:'#58cc02', palavras:[
+    {en:'tree',pt:'árvore',emoji:'🌳'},{en:'flower',pt:'flor',emoji:'🌸'},{en:'sun',pt:'sol',emoji:'☀️'},{en:'moon',pt:'lua',emoji:'🌙'},
+    {en:'star',pt:'estrela',emoji:'⭐'},{en:'rain',pt:'chuva',emoji:'🌧️'},{en:'sky',pt:'céu',emoji:'🌌'},{en:'mountain',pt:'montanha',emoji:'⛰️'}]},
+  {id:'corpo', unidade:4, titulo:'Corpo', emoji:'🙋', cor:'#4d96ff', palavras:[
+    {en:'head',pt:'cabeça',emoji:'😀'},{en:'eyes',pt:'olhos',emoji:'👀'},{en:'nose',pt:'nariz',emoji:'👃'},{en:'mouth',pt:'boca',emoji:'👄'},
+    {en:'hand',pt:'mão',emoji:'✋'},{en:'foot',pt:'pé',emoji:'🦶'},{en:'ear',pt:'orelha',emoji:'👂'},{en:'hair',pt:'cabelo',emoji:'💇'}]},
+  {id:'roupas', unidade:4, titulo:'Roupas', emoji:'👕', cor:'#9b5de5', palavras:[
+    {en:'shirt',pt:'camisa',emoji:'👕'},{en:'pants',pt:'calça',emoji:'👖'},{en:'dress',pt:'vestido',emoji:'👗'},{en:'shoes',pt:'sapatos',emoji:'👟'},
+    {en:'hat',pt:'chapéu',emoji:'🧢'},{en:'socks',pt:'meias',emoji:'🧦'},{en:'jacket',pt:'casaco',emoji:'🧥'},{en:'glasses',pt:'óculos',emoji:'👓'}]},
+  {id:'higiene', unidade:4, titulo:'Higiene', emoji:'🧼', cor:'#00b8b8', palavras:[
+    {en:'soap',pt:'sabonete',emoji:'🧼'},{en:'toothbrush',pt:'escova de dente',emoji:'🪥'},{en:'toothpaste',pt:'pasta de dente',emoji:'🦷'},{en:'towel',pt:'toalha',emoji:'🧻'},
+    {en:'shampoo',pt:'xampu',emoji:'🧴'},{en:'comb',pt:'pente',emoji:'💇'},{en:'shower',pt:'chuveiro',emoji:'🚿'},{en:'bathtub',pt:'banheira',emoji:'🛁'}]},
+  {id:'escola', unidade:5, titulo:'Escola', emoji:'🏫', cor:'#9b5de5', palavras:[
+    {en:'school',pt:'escola',emoji:'🏫'},{en:'teacher',pt:'professor',emoji:'🧑‍🏫'},{en:'student',pt:'aluno',emoji:'🧑‍🎓'},{en:'book',pt:'livro',emoji:'📖'},
+    {en:'pencil',pt:'lápis',emoji:'✏️'},{en:'pen',pt:'caneta',emoji:'🖊️'},{en:'notebook',pt:'caderno',emoji:'📓'},{en:'backpack',pt:'mochila',emoji:'🎒'}]},
+  {id:'transportes', unidade:5, titulo:'Transportes', emoji:'🚌', cor:'#9b5de5', palavras:[
+    {en:'car',pt:'carro',emoji:'🚗'},{en:'bus',pt:'ônibus',emoji:'🚌'},{en:'train',pt:'trem',emoji:'🚆'},{en:'plane',pt:'avião',emoji:'✈️'},
+    {en:'boat',pt:'barco',emoji:'🚤'},{en:'bicycle',pt:'bicicleta',emoji:'🚲'},{en:'motorcycle',pt:'moto',emoji:'🏍️'},{en:'truck',pt:'caminhão',emoji:'🚚'}]},
+  {id:'objetos-escola', unidade:5, titulo:'Objetos Escolares', emoji:'📏', cor:'#9b5de5', palavras:[
+    {en:'ruler',pt:'régua',emoji:'📏'},{en:'eraser',pt:'borracha',emoji:'🧽'},{en:'scissors',pt:'tesoura',emoji:'✂️'},{en:'glue',pt:'cola',emoji:'🧴'},
+    {en:'crayon',pt:'giz de cera',emoji:'🖍️'},{en:'bag',pt:'bolsa',emoji:'👜'},{en:'desk',pt:'carteira',emoji:'🪑'},{en:'board',pt:'lousa',emoji:'🖥️'}]},
+  {id:'acoes', unidade:6, titulo:'Ações', emoji:'🏃', cor:'#ffc800', palavras:[
+    {en:'run',pt:'correr',emoji:'🏃'},{en:'jump',pt:'pular',emoji:'🤸'},{en:'walk',pt:'andar',emoji:'🚶'},{en:'sit',pt:'sentar',emoji:'🪑'},
+    {en:'stand',pt:'ficar em pé',emoji:'🧍'},{en:'eat',pt:'comer',emoji:'🍽️'},{en:'drink',pt:'beber',emoji:'🥤'},{en:'sleep',pt:'dormir',emoji:'😴'}]},
+  {id:'sentimentos', unidade:6, titulo:'Sentimentos', emoji:'🎭', cor:'#ffc800', palavras:[
+    {en:'happy',pt:'feliz',emoji:'😊'},{en:'sad',pt:'triste',emoji:'😢'},{en:'angry',pt:'bravo',emoji:'😠'},{en:'scared',pt:'com medo',emoji:'😨'},
+    {en:'tired',pt:'cansado',emoji:'😪'},{en:'hungry',pt:'com fome',emoji:'😋'},{en:'thirsty',pt:'com sede',emoji:'🥵'},{en:'excited',pt:'animado',emoji:'🤩'}]},
+  {id:'emocoes2', unidade:6, titulo:'Emoções', emoji:'💖', cor:'#ffc800', palavras:[
+    {en:'love',pt:'amor',emoji:'❤️'},{en:'proud',pt:'orgulhoso',emoji:'😌'},{en:'shy',pt:'tímido',emoji:'😳'},{en:'surprised',pt:'surpreso',emoji:'😲'},
+    {en:'calm',pt:'calmo',emoji:'😌'},{en:'nervous',pt:'nervoso',emoji:'😰'},{en:'sick',pt:'doente',emoji:'🤒'},{en:'strong',pt:'forte',emoji:'💪'}]},
+  {id:'formas', unidade:7, titulo:'Formas', emoji:'🔷', cor:'#00b8b8', palavras:[
+    {en:'circle',pt:'círculo',emoji:'⭕'},{en:'square',pt:'quadrado',emoji:'🟦'},{en:'triangle',pt:'triângulo',emoji:'🔺'},{en:'rectangle',pt:'retângulo',emoji:'▬'},
+    {en:'star',pt:'estrela',emoji:'⭐'},{en:'heart',pt:'coração',emoji:'❤️'},{en:'diamond',pt:'losango',emoji:'🔶'},{en:'oval',pt:'oval',emoji:'🥚'}]},
+  {id:'dias', unidade:7, titulo:'Dias da Semana', emoji:'📅', cor:'#00b8b8', palavras:[
+    {en:'Monday',pt:'segunda-feira',emoji:'1️⃣'},{en:'Tuesday',pt:'terça-feira',emoji:'2️⃣'},{en:'Wednesday',pt:'quarta-feira',emoji:'3️⃣'},{en:'Thursday',pt:'quinta-feira',emoji:'4️⃣'},
+    {en:'Friday',pt:'sexta-feira',emoji:'5️⃣'},{en:'Saturday',pt:'sábado',emoji:'6️⃣'},{en:'Sunday',pt:'domingo',emoji:'7️⃣'}]},
+  {id:'clima', unidade:7, titulo:'Clima', emoji:'🌦️', cor:'#00b8b8', palavras:[
+    {en:'sunny',pt:'ensolarado',emoji:'☀️'},{en:'rainy',pt:'chuvoso',emoji:'🌧️'},{en:'cloudy',pt:'nublado',emoji:'☁️'},{en:'windy',pt:'ventoso',emoji:'💨'},
+    {en:'hot',pt:'quente',emoji:'🥵'},{en:'cold',pt:'frio',emoji:'🥶'},{en:'snow',pt:'neve',emoji:'❄️'},{en:'storm',pt:'tempestade',emoji:'⛈️'}]},
+  {id:'lugares', unidade:8, titulo:'Lugares', emoji:'🏙️', cor:'#ff8a5c', palavras:[
+    {en:'school',pt:'escola',emoji:'🏫'},{en:'hospital',pt:'hospital',emoji:'🏥'},{en:'park',pt:'parque',emoji:'🏞️'},{en:'store',pt:'loja',emoji:'🏪'},
+    {en:'restaurant',pt:'restaurante',emoji:'🍽️'},{en:'library',pt:'biblioteca',emoji:'📚'},{en:'church',pt:'igreja',emoji:'⛪'},{en:'beach',pt:'praia',emoji:'🏖️'}]},
+  {id:'supermercado', unidade:8, titulo:'Supermercado', emoji:'🛒', cor:'#ff8a5c', palavras:[
+    {en:'cart',pt:'carrinho',emoji:'🛒'},{en:'money',pt:'dinheiro',emoji:'💵'},{en:'price',pt:'preço',emoji:'🏷️'},{en:'customer',pt:'cliente',emoji:'🧑'},
+    {en:'cashier',pt:'caixa',emoji:'🧾'},{en:'market',pt:'mercado',emoji:'🏪'},{en:'bag',pt:'sacola',emoji:'🛍️'},{en:'list',pt:'lista',emoji:'📝'}]},
+  {id:'restaurante', unidade:8, titulo:'Restaurante', emoji:'🍽️', cor:'#ff8a5c', palavras:[
+    {en:'menu',pt:'cardápio',emoji:'📋'},{en:'waiter',pt:'garçom',emoji:'🤵'},{en:'plate',pt:'prato',emoji:'🍽️'},{en:'fork',pt:'garfo',emoji:'🍴'},
+    {en:'knife',pt:'faca',emoji:'🔪'},{en:'spoon',pt:'colher',emoji:'🥄'},{en:'glass',pt:'copo',emoji:'🥛'},{en:'napkin',pt:'guardanapo',emoji:'🧻'}]},
+  {id:'bebidas', unidade:9, titulo:'Bebidas', emoji:'🥤', cor:'#6bcb77', palavras:[
+    {en:'water',pt:'água',emoji:'💧'},{en:'milk',pt:'leite',emoji:'🥛'},{en:'juice',pt:'suco',emoji:'🧃'},{en:'tea',pt:'chá',emoji:'🍵'},
+    {en:'coffee',pt:'café',emoji:'☕'},{en:'soda',pt:'refrigerante',emoji:'🥤'},{en:'lemonade',pt:'limonada',emoji:'🍋'},{en:'hot chocolate',pt:'chocolate quente',emoji:'🍫'}]},
+  {id:'refeicoes', unidade:9, titulo:'Refeições', emoji:'🍽️', cor:'#6bcb77', palavras:[
+    {en:'breakfast',pt:'café da manhã',emoji:'🍳'},{en:'lunch',pt:'almoço',emoji:'🍱'},{en:'dinner',pt:'jantar',emoji:'🍲'},{en:'snack',pt:'lanche',emoji:'🍿'},
+    {en:'dessert',pt:'sobremesa',emoji:'🍰'},{en:'soup',pt:'sopa',emoji:'🍜'},{en:'salad',pt:'salada',emoji:'🥗'},{en:'sandwich',pt:'sanduíche',emoji:'🥪'}]},
+  {id:'vegetais', unidade:9, titulo:'Vegetais', emoji:'🥦', cor:'#6bcb77', palavras:[
+    {en:'carrot',pt:'cenoura',emoji:'🥕'},{en:'tomato',pt:'tomate',emoji:'🍅'},{en:'potato',pt:'batata',emoji:'🥔'},{en:'onion',pt:'cebola',emoji:'🧅'},
+    {en:'corn',pt:'milho',emoji:'🌽'},{en:'lettuce',pt:'alface',emoji:'🥬'},{en:'broccoli',pt:'brócolis',emoji:'🥦'},{en:'cucumber',pt:'pepino',emoji:'🥒'}]},
+  {id:'esportes', unidade:10, titulo:'Esportes', emoji:'⚽', cor:'#ff9600', palavras:[
+    {en:'soccer',pt:'futebol',emoji:'⚽'},{en:'basketball',pt:'basquete',emoji:'🏀'},{en:'tennis',pt:'tênis',emoji:'🎾'},{en:'swimming',pt:'natação',emoji:'🏊'},
+    {en:'running',pt:'corrida',emoji:'🏃'},{en:'volleyball',pt:'vôlei',emoji:'🏐'},{en:'baseball',pt:'beisebol',emoji:'⚾'},{en:'skating',pt:'patinação',emoji:'⛸️'}]},
+  {id:'hobbies', unidade:10, titulo:'Hobbies', emoji:'🎨', cor:'#ff9600', palavras:[
+    {en:'reading',pt:'ler',emoji:'📖'},{en:'drawing',pt:'desenhar',emoji:'🎨'},{en:'singing',pt:'cantar',emoji:'🎤'},{en:'dancing',pt:'dançar',emoji:'💃'},
+    {en:'cooking',pt:'cozinhar',emoji:'🍳'},{en:'painting',pt:'pintar',emoji:'🖌️'},{en:'fishing',pt:'pescar',emoji:'🎣'},{en:'gardening',pt:'jardinagem',emoji:'🌻'}]},
+  {id:'brincadeiras', unidade:10, titulo:'Brincadeiras', emoji:'🤹', cor:'#ff9600', palavras:[
+    {en:'hide and seek',pt:'esconde-esconde',emoji:'🙈'},{en:'tag',pt:'pega-pega',emoji:'🏃'},{en:'skipping rope',pt:'pular corda',emoji:'🪢'},{en:'swing',pt:'balanço',emoji:'🛝'},
+    {en:'slide',pt:'escorregador',emoji:'🛝'},{en:'sandbox',pt:'caixa de areia',emoji:'🏖️'},{en:'balloon',pt:'balão',emoji:'🎈'},{en:'toy',pt:'brinquedo',emoji:'🧸'}]},
+  {id:'profissoes', unidade:11, titulo:'Profissões', emoji:'👷', cor:'#4d96ff', palavras:[
+    {en:'doctor',pt:'médico',emoji:'👨‍⚕️'},{en:'teacher',pt:'professor',emoji:'🧑‍🏫'},{en:'firefighter',pt:'bombeiro',emoji:'👨‍🚒'},{en:'police officer',pt:'policial',emoji:'👮'},
+    {en:'pilot',pt:'piloto',emoji:'👨‍✈️'},{en:'chef',pt:'cozinheiro',emoji:'👨‍🍳'},{en:'farmer',pt:'fazendeiro',emoji:'👨‍🌾'},{en:'driver',pt:'motorista',emoji:'🚗'}]},
+  {id:'profissoes2', unidade:11, titulo:'Mais Profissões', emoji:'👨‍🔧', cor:'#4d96ff', palavras:[
+    {en:'nurse',pt:'enfermeiro',emoji:'👩‍⚕️'},{en:'dentist',pt:'dentista',emoji:'🦷'},{en:'vet',pt:'veterinário',emoji:'🐾'},{en:'mechanic',pt:'mecânico',emoji:'👨‍🔧'},
+    {en:'builder',pt:'pedreiro',emoji:'👷'},{en:'singer',pt:'cantor',emoji:'🎤'},{en:'artist',pt:'artista',emoji:'🎨'},{en:'scientist',pt:'cientista',emoji:'🔬'}]},
+  {id:'ferramentas', unidade:11, titulo:'Ferramentas', emoji:'🔧', cor:'#4d96ff', palavras:[
+    {en:'hammer',pt:'martelo',emoji:'🔨'},{en:'screwdriver',pt:'chave de fenda',emoji:'🪛'},{en:'nail',pt:'prego',emoji:'📌'},{en:'saw',pt:'serra',emoji:'🪚'},
+    {en:'ladder',pt:'escada',emoji:'🪜'},{en:'paint',pt:'tinta',emoji:'🎨'},{en:'bucket',pt:'balde',emoji:'🪣'},{en:'rope',pt:'corda',emoji:'🪢'}]},
+  {id:'tempo', unidade:12, titulo:'Tempo', emoji:'⏰', cor:'#9b5de5', palavras:[
+    {en:'hour',pt:'hora',emoji:'🕐'},{en:'minute',pt:'minuto',emoji:'⏱️'},{en:'second',pt:'segundo',emoji:'⏲️'},{en:'morning',pt:'manhã',emoji:'🌅'},
+    {en:'afternoon',pt:'tarde',emoji:'🌇'},{en:'evening',pt:'noite',emoji:'🌆'},{en:'night',pt:'noite',emoji:'🌙'},{en:'today',pt:'hoje',emoji:'📆'}]},
+  {id:'datas', unidade:12, titulo:'Datas', emoji:'📆', cor:'#9b5de5', palavras:[
+    {en:'day',pt:'dia',emoji:'☀️'},{en:'week',pt:'semana',emoji:'📅'},{en:'month',pt:'mês',emoji:'🗓️'},{en:'year',pt:'ano',emoji:'🎆'},
+    {en:'yesterday',pt:'ontem',emoji:'↩️'},{en:'tomorrow',pt:'amanhã',emoji:'↪️'},{en:'birthday',pt:'aniversário',emoji:'🎂'},{en:'calendar',pt:'calendário',emoji:'📅'}]},
+  {id:'estacoes', unidade:12, titulo:'Estações', emoji:'🍂', cor:'#9b5de5', palavras:[
+    {en:'spring',pt:'primavera',emoji:'🌸'},{en:'summer',pt:'verão',emoji:'☀️'},{en:'fall',pt:'outono',emoji:'🍂'},{en:'winter',pt:'inverno',emoji:'❄️'},
+    {en:'season',pt:'estação',emoji:'🌍'},{en:'holiday',pt:'feriado',emoji:'🎉'},{en:'vacation',pt:'férias',emoji:'🏖️'},{en:'weekend',pt:'fim de semana',emoji:'🎊'}]},
+  {id:'adjetivos1', unidade:13, titulo:'Adjetivos 1', emoji:'🌟', cor:'#ff6b9d', palavras:[
+    {en:'big',pt:'grande',emoji:'🐘'},{en:'small',pt:'pequeno',emoji:'🐭'},{en:'tall',pt:'alto',emoji:'🦒'},{en:'short',pt:'baixo',emoji:'🐢'},
+    {en:'fast',pt:'rápido',emoji:'🚀'},{en:'slow',pt:'lento',emoji:'🐌'},{en:'strong',pt:'forte',emoji:'💪'},{en:'weak',pt:'fraco',emoji:'🍃'}]},
+  {id:'adjetivos2', unidade:13, titulo:'Adjetivos 2', emoji:'✨', cor:'#ff6b9d', palavras:[
+    {en:'new',pt:'novo',emoji:'✨'},{en:'old',pt:'velho',emoji:'🏚️'},{en:'clean',pt:'limpo',emoji:'🧼'},{en:'dirty',pt:'sujo',emoji:'🟤'},
+    {en:'beautiful',pt:'bonito',emoji:'🌺'},{en:'ugly',pt:'feio',emoji:'👺'},{en:'young',pt:'jovem',emoji:'🧒'},{en:'heavy',pt:'pesado',emoji:'🪨'}]},
+  {id:'opostos', unidade:13, titulo:'Opostos', emoji:'⚖️', cor:'#ff6b9d', palavras:[
+    {en:'up',pt:'para cima',emoji:'⬆️'},{en:'down',pt:'para baixo',emoji:'⬇️'},{en:'left',pt:'esquerda',emoji:'⬅️'},{en:'right',pt:'direita',emoji:'➡️'},
+    {en:'open',pt:'aberto',emoji:'🔓'},{en:'closed',pt:'fechado',emoji:'🔒'},{en:'full',pt:'cheio',emoji:'🈵'},{en:'empty',pt:'vazio',emoji:'🈳'}]},
+  {id:'preposicoes', unidade:14, titulo:'Preposições', emoji:'📍', cor:'#00b8b8', palavras:[
+    {en:'in',pt:'dentro',emoji:'📦'},{en:'on',pt:'em cima',emoji:'🔼'},{en:'under',pt:'embaixo',emoji:'🔽'},{en:'over',pt:'sobre',emoji:'🌉'},
+    {en:'behind',pt:'atrás',emoji:'🚪'},{en:'next to',pt:'ao lado',emoji:'🤝'},{en:'between',pt:'entre',emoji:'↔️'},{en:'in front of',pt:'na frente',emoji:'➡️'}]},
+  {id:'posicoes', unidade:14, titulo:'Posições', emoji:'🧭', cor:'#00b8b8', palavras:[
+    {en:'here',pt:'aqui',emoji:'📍'},{en:'there',pt:'ali',emoji:'👉'},{en:'near',pt:'perto',emoji:'🔍'},{en:'far',pt:'longe',emoji:'🔭'},
+    {en:'inside',pt:'dentro',emoji:'🏠'},{en:'outside',pt:'fora',emoji:'🌳'},{en:'above',pt:'acima',emoji:'⬆️'},{en:'below',pt:'abaixo',emoji:'⬇️'}]},
+  {id:'animais-mundo1', unidade:15, titulo:'Animais do Mundo', emoji:'🦁', cor:'#58cc02', palavras:[
+    {en:'elephant',pt:'elefante',emoji:'🐘'},{en:'giraffe',pt:'girafa',emoji:'🦒'},{en:'tiger',pt:'tigre',emoji:'🐯'},{en:'bear',pt:'urso',emoji:'🐻'},
+    {en:'panda',pt:'panda',emoji:'🐼'},{en:'zebra',pt:'zebra',emoji:'🦓'},{en:'kangaroo',pt:'canguru',emoji:'🦘'},{en:'penguin',pt:'pinguim',emoji:'🐧'}]},
+  {id:'animais-mundo2', unidade:15, titulo:'Animais do Mar', emoji:'🐠', cor:'#58cc02', palavras:[
+    {en:'dolphin',pt:'golfinho',emoji:'🐬'},{en:'shark',pt:'tubarão',emoji:'🦈'},{en:'whale',pt:'baleia',emoji:'🐋'},{en:'turtle',pt:'tartaruga',emoji:'🐢'},
+    {en:'snake',pt:'cobra',emoji:'🐍'},{en:'frog',pt:'sapo',emoji:'🐸'},{en:'owl',pt:'coruja',emoji:'🦉'},{en:'butterfly',pt:'borboleta',emoji:'🦋'}]},
+  {id:'insetos', unidade:15, titulo:'Insetos', emoji:'🐛', cor:'#58cc02', palavras:[
+    {en:'bee',pt:'abelha',emoji:'🐝'},{en:'ant',pt:'formiga',emoji:'🐜'},{en:'spider',pt:'aranha',emoji:'🕷️'},{en:'ladybug',pt:'joaninha',emoji:'🐞'},
+    {en:'mosquito',pt:'mosquito',emoji:'🦟'},{en:'beetle',pt:'besouro',emoji:'🪲'},{en:'caterpillar',pt:'lagarta',emoji:'🐛'},{en:'snail',pt:'caracol',emoji:'🐌'}]},
+  {id:'instrumentos', unidade:16, titulo:'Instrumentos', emoji:'🎵', cor:'#9b5de5', palavras:[
+    {en:'guitar',pt:'violão',emoji:'🎸'},{en:'piano',pt:'piano',emoji:'🎹'},{en:'drum',pt:'bateria',emoji:'🥁'},{en:'violin',pt:'violino',emoji:'🎻'},
+    {en:'flute',pt:'flauta',emoji:'🪈'},{en:'trumpet',pt:'trompete',emoji:'🎺'},{en:'bell',pt:'sino',emoji:'🔔'},{en:'microphone',pt:'microfone',emoji:'🎤'}]},
+  {id:'sons', unidade:16, titulo:'Sons e Música', emoji:'🎶', cor:'#9b5de5', palavras:[
+    {en:'song',pt:'canção',emoji:'🎵'},{en:'music',pt:'música',emoji:'🎶'},{en:'dance',pt:'dança',emoji:'💃'},{en:'concert',pt:'concerto',emoji:'🎤'},
+    {en:'band',pt:'banda',emoji:'🥁'},{en:'radio',pt:'rádio',emoji:'📻'},{en:'headphones',pt:'fones',emoji:'🎧'},{en:'loud',pt:'alto (som)',emoji:'📢'}]},
+  {id:'tecnologia', unidade:17, titulo:'Tecnologia', emoji:'💻', cor:'#4d96ff', palavras:[
+    {en:'computer',pt:'computador',emoji:'💻'},{en:'phone',pt:'celular',emoji:'📱'},{en:'tablet',pt:'tablet',emoji:'📱'},{en:'television',pt:'televisão',emoji:'📺'},
+    {en:'camera',pt:'câmera',emoji:'📷'},{en:'robot',pt:'robô',emoji:'🤖'},{en:'internet',pt:'internet',emoji:'🌐'},{en:'game',pt:'jogo',emoji:'🎮'}]},
+  {id:'internet', unidade:17, titulo:'Internet', emoji:'🌐', cor:'#4d96ff', palavras:[
+    {en:'website',pt:'site',emoji:'🌐'},{en:'email',pt:'e-mail',emoji:'📧'},{en:'video',pt:'vídeo',emoji:'📹'},{en:'photo',pt:'foto',emoji:'📸'},
+    {en:'keyboard',pt:'teclado',emoji:'⌨️'},{en:'mouse',pt:'mouse',emoji:'🖱️'},{en:'screen',pt:'tela',emoji:'🖥️'},{en:'button',pt:'botão',emoji:'🔘'}]},
+  {id:'festas', unidade:18, titulo:'Festas', emoji:'🎉', cor:'#ff6b9d', palavras:[
+    {en:'birthday',pt:'aniversário',emoji:'🎂'},{en:'cake',pt:'bolo',emoji:'🎂'},{en:'candle',pt:'vela',emoji:'🕯️'},{en:'gift',pt:'presente',emoji:'🎁'},
+    {en:'balloon',pt:'balão',emoji:'🎈'},{en:'party',pt:'festa',emoji:'🎉'},{en:'song',pt:'música',emoji:'🎵'},{en:'invitation',pt:'convite',emoji:'💌'}]},
+  {id:'natal', unidade:18, titulo:'Natal', emoji:'🎄', cor:'#ff6b9d', palavras:[
+    {en:'Christmas',pt:'Natal',emoji:'🎄'},{en:'Santa Claus',pt:'Papai Noel',emoji:'🎅'},{en:'snowman',pt:'boneco de neve',emoji:'⛄'},{en:'reindeer',pt:'rena',emoji:'🦌'},
+    {en:'ornament',pt:'enfeite',emoji:'🎊'},{en:'star',pt:'estrela',emoji:'⭐'},{en:'stocking',pt:'meia de natal',emoji:'🧦'},{en:'wreath',pt:'guirlanda',emoji:'🌿'}]},
+  {id:'verbos1', unidade:19, titulo:'Verbos 1', emoji:'🏃', cor:'#ff9600', palavras:[
+    {en:'go',pt:'ir',emoji:'🚶'},{en:'come',pt:'vir',emoji:'➡️'},{en:'see',pt:'ver',emoji:'👀'},{en:'hear',pt:'ouvir',emoji:'👂'},
+    {en:'play',pt:'brincar',emoji:'⚽'},{en:'work',pt:'trabalhar',emoji:'💼'},{en:'open',pt:'abrir',emoji:'🔓'},{en:'close',pt:'fechar',emoji:'🔒'}]},
+  {id:'verbos2', unidade:19, titulo:'Verbos 2', emoji:'🙋', cor:'#ff9600', palavras:[
+    {en:'read',pt:'ler',emoji:'📖'},{en:'write',pt:'escrever',emoji:'✍️'},{en:'speak',pt:'falar',emoji:'🗣️'},{en:'listen',pt:'escutar',emoji:'🎧'},
+    {en:'buy',pt:'comprar',emoji:'🛒'},{en:'give',pt:'dar',emoji:'🎁'},{en:'help',pt:'ajudar',emoji:'🤝'},{en:'love',pt:'amar',emoji:'❤️'}]},
+  {id:'verbos3', unidade:19, titulo:'Verbos 3', emoji:'🤸', cor:'#ff9600', palavras:[
+    {en:'sing',pt:'cantar',emoji:'🎤'},{en:'swim',pt:'nadar',emoji:'🏊'},{en:'fly',pt:'voar',emoji:'🕊️'},{en:'draw',pt:'desenhar',emoji:'✏️'},
+    {en:'cook',pt:'cozinhar',emoji:'🍳'},{en:'clean',pt:'limpar',emoji:'🧹'},{en:'wash',pt:'lavar',emoji:'🚿'},{en:'dance',pt:'dançar',emoji:'💃'}]},
+  {id:'frases-dia', unidade:20, titulo:'Expressões Úteis', emoji:'💬', cor:'#ffc800', palavras:[
+    {en:'excuse me',pt:'com licença',emoji:'🙋'},{en:'sorry',pt:'desculpa',emoji:'🙏'},{en:'welcome',pt:'bem-vindo',emoji:'👋'},{en:'good luck',pt:'boa sorte',emoji:'🍀'},
+    {en:'see you',pt:'até logo',emoji:'👋'},{en:'of course',pt:'claro',emoji:'✅'},{en:'no problem',pt:'sem problema',emoji:'👍'},{en:'well done',pt:'muito bem',emoji:'👏'}]},
+  {id:'perguntas', unidade:20, titulo:'Perguntas', emoji:'❓', cor:'#ffc800', palavras:[
+    {en:'who',pt:'quem',emoji:'🧑'},{en:'what',pt:'o quê',emoji:'❓'},{en:'where',pt:'onde',emoji:'📍'},{en:'when',pt:'quando',emoji:'⏰'},
+    {en:'why',pt:'por quê',emoji:'🤔'},{en:'how',pt:'como',emoji:'🔧'},{en:'which',pt:'qual',emoji:'👉'},{en:'how many',pt:'quantos',emoji:'🔢'}]},
+];
+
+const TODAS_PALAVRAS = LICOES.flatMap(l=>l.palavras);
+
+const FRASES = [
+  {q:"What is your name?", qt:"Qual é o seu nome?", a:"My name is Mia", at:"Meu nome é Mia", emoji:"🙂"},
+  {q:"How are you?", qt:"Como você está?", a:"I am fine thank you", at:"Estou bem, obrigado", emoji:"😊"},
+  {q:"How old are you?", qt:"Quantos anos você tem?", a:"I am seven years old", at:"Tenho sete anos", emoji:"🎂"},
+  {q:"Where do you live?", qt:"Onde você mora?", a:"I live in Brazil", at:"Moro no Brasil", emoji:"🏡"},
+  {q:"What is this?", qt:"O que é isso?", a:"It is a cat", at:"É um gato", emoji:"🐱"},
+  {q:"Do you like apples?", qt:"Você gosta de maçãs?", a:"Yes I do", at:"Sim, eu gosto", emoji:"🍎"},
+  {q:"What color is the sky?", qt:"De que cor é o céu?", a:"It is blue", at:"É azul", emoji:"🔵"},
+  {q:"What time is it?", qt:"Que horas são?", a:"It is three o'clock", at:"São três horas", emoji:"🕒"},
+  {q:"Where is the cat?", qt:"Onde está o gato?", a:"It is under the table", at:"Está debaixo da mesa", emoji:"🐈"},
+  {q:"Can you help me?", qt:"Você pode me ajudar?", a:"Yes I can", at:"Sim, eu posso", emoji:"🤝"},
+  {q:"What is your favorite color?", qt:"Qual é a sua cor favorita?", a:"My favorite color is green", at:"Minha cor favorita é verde", emoji:"🟢"},
+  {q:"Good morning!", qt:"Bom dia!", a:"Good morning!", at:"Bom dia!", emoji:"🌅"},
+  {q:"Thank you!", qt:"Obrigado!", a:"You are welcome", at:"De nada", emoji:"🙏"},
+  {q:"I am sorry!", qt:"Me desculpe!", a:"That is okay", at:"Tudo bem", emoji:"😌"},
+  {q:"What do you want?", qt:"O que você quer?", a:"I want some water", at:"Eu quero água", emoji:"💧"},
+  {q:"Where are you from?", qt:"De onde você é?", a:"I am from Brazil", at:"Sou do Brasil", emoji:"🇧🇷"},
+  {q:"Who is she?", qt:"Quem é ela?", a:"She is my sister", at:"Ela é minha irmã", emoji:"👧"},
+  {q:"Who is he?", qt:"Quem é ele?", a:"He is my brother", at:"Ele é meu irmão", emoji:"👦"},
+  {q:"What do you like?", qt:"O que você gosta?", a:"I like ice cream", at:"Eu gosto de sorvete", emoji:"🍦"},
+  {q:"Do you have a pet?", qt:"Você tem um animal de estimação?", a:"Yes I have a dog", at:"Sim, tenho um cachorro", emoji:"🐶"},
+  {q:"What is the weather like?", qt:"Como está o tempo?", a:"It is sunny", at:"Está ensolarado", emoji:"☀️"},
+  {q:"How many cats?", qt:"Quantos gatos?", a:"Three cats", at:"Três gatos", emoji:"🐱"},
+  {q:"Is this your book?", qt:"Este é o seu livro?", a:"Yes it is", at:"Sim, é", emoji:"📖"},
+  {q:"What day is it?", qt:"Que dia é hoje?", a:"It is Monday", at:"É segunda-feira", emoji:"📅"},
+  {q:"Happy birthday!", qt:"Feliz aniversário!", a:"Thank you!", at:"Obrigado!", emoji:"🎂"},
+  {q:"Merry Christmas!", qt:"Feliz Natal!", a:"Merry Christmas!", at:"Feliz Natal!", emoji:"🎄"},
+  {q:"What do you see?", qt:"O que você vê?", a:"I see a bird", at:"Eu vejo um pássaro", emoji:"🐦"},
+  {q:"Where is the bathroom?", qt:"Onde fica o banheiro?", a:"It is over there", at:"É ali", emoji:"🚻"},
+  {q:"Do you like school?", qt:"Você gosta da escola?", a:"Yes I do", at:"Sim, eu gosto", emoji:"🏫"},
+  {q:"What is your favorite food?", qt:"Qual é a sua comida favorita?", a:"My favorite food is pizza", at:"Minha comida favorita é pizza", emoji:"🍕"},
+  {q:"Can you swim?", qt:"Você sabe nadar?", a:"Yes I can swim", at:"Sim, eu sei nadar", emoji:"🏊"},
+  {q:"Do you speak English?", qt:"Você fala inglês?", a:"Yes a little", at:"Sim, um pouco", emoji:"🗣️"},
+  {q:"What is your favorite animal?", qt:"Qual é o seu animal favorito?", a:"My favorite animal is a dog", at:"Meu animal favorito é o cachorro", emoji:"🐶"},
+  {q:"How is the weather today?", qt:"Como está o tempo hoje?", a:"It is hot today", at:"Está quente hoje", emoji:"🥵"},
+  {q:"Where are you going?", qt:"Aonde você vai?", a:"I am going to school", at:"Vou para a escola", emoji:"🏫"},
+  {q:"What are you doing?", qt:"O que você está fazendo?", a:"I am playing", at:"Estou brincando", emoji:"⚽"},
+  {q:"Do you want to play?", qt:"Você quer brincar?", a:"Yes let's play", at:"Sim, vamos brincar", emoji:"🎮"},
+  {q:"What is this in English?", qt:"Como se diz isso em inglês?", a:"It is a ball", at:"É uma bola", emoji:"⚽"},
+  {q:"I love you!", qt:"Eu te amo!", a:"I love you too", at:"Eu também te amo", emoji:"❤️"},
+  {q:"Good night!", qt:"Boa noite!", a:"Good night!", at:"Boa noite!", emoji:"🌙"},
+  {q:"See you later!", qt:"Até mais tarde!", a:"See you!", at:"Até logo!", emoji:"👋"},
+  {q:"How much is it?", qt:"Quanto custa?", a:"It is five reais", at:"São cinco reais", emoji:"💵"},
+  {q:"What do you eat?", qt:"O que você come?", a:"I eat rice and beans", at:"Como arroz e feijão", emoji:"🍚"},
+  {q:"Where is mom?", qt:"Onde está a mamãe?", a:"She is in the kitchen", at:"Ela está na cozinha", emoji:"🍳"},
+  {q:"Do you like music?", qt:"Você gosta de música?", a:"Yes I love music", at:"Sim, amo música", emoji:"🎵"},
+  {q:"What color is the apple?", qt:"De que cor é a maçã?", a:"It is red", at:"É vermelha", emoji:"🍎"},
+  {q:"Can I go to the bathroom?", qt:"Posso ir ao banheiro?", a:"Yes you can", at:"Sim, você pode", emoji:"🚻"},
+  {q:"What is your favorite toy?", qt:"Qual é o seu brinquedo favorito?", a:"My favorite toy is a ball", at:"Meu brinquedo favorito é a bola", emoji:"⚽"},
+  {q:"How do you go to school?", qt:"Como você vai à escola?", a:"I go by bus", at:"Vou de ônibus", emoji:"🚌"},
+  {q:"What season is it?", qt:"Que estação é?", a:"It is summer", at:"É verão", emoji:"☀️"},
+  {q:"What is your father's name?", qt:"Qual é o nome do seu pai?", a:"His name is João", at:"O nome dele é João", emoji:"👨"},
+  {q:"What is your mother's name?", qt:"Qual é o nome da sua mãe?", a:"Her name is Maria", at:"O nome dela é Maria", emoji:"👩"},
+  {q:"Do you have brothers?", qt:"Você tem irmãos?", a:"Yes I have one brother", at:"Sim, tenho um irmão", emoji:"👦"},
+  {q:"How many brothers do you have?", qt:"Quantos irmãos você tem?", a:"I have two brothers", at:"Tenho dois irmãos", emoji:"👦"},
+  {q:"Where is your school?", qt:"Onde fica a sua escola?", a:"It is near my house", at:"É perto da minha casa", emoji:"🏫"},
+  {q:"What do you drink?", qt:"O que você bebe?", a:"I drink orange juice", at:"Bebo suco de laranja", emoji:"🧃"},
+  {q:"What is your favorite drink?", qt:"Qual é a sua bebida favorita?", a:"My favorite drink is water", at:"Minha bebida favorita é água", emoji:"💧"},
+  {q:"Do you like to read?", qt:"Você gosta de ler?", a:"Yes I love to read", at:"Sim, adoro ler", emoji:"📖"},
+  {q:"What book are you reading?", qt:"Que livro você está lendo?", a:"I am reading a story", at:"Estou lendo uma história", emoji:"📚"},
+  {q:"Can you dance?", qt:"Você sabe dançar?", a:"Yes I can dance", at:"Sim, eu sei dançar", emoji:"💃"},
+  {q:"What is your favorite song?", qt:"Qual é a sua música favorita?", a:"My favorite song is happy", at:"Minha música favorita é feliz", emoji:"🎵"},
+  {q:"Do you have a bicycle?", qt:"Você tem bicicleta?", a:"Yes I have a red bicycle", at:"Sim, tenho uma bicicleta vermelha", emoji:"🚲"},
+  {q:"What is in your bag?", qt:"O que tem na sua mochila?", a:"There is a book in my bag", at:"Tem um livro na minha mochila", emoji:"🎒"},
+  {q:"Where is your father?", qt:"Onde está o seu pai?", a:"He is at work", at:"Ele está no trabalho", emoji:"💼"},
+  {q:"What does your mother do?", qt:"O que a sua mãe faz?", a:"She is a teacher", at:"Ela é professora", emoji:"🧑‍🏫"},
+  {q:"How do you feel?", qt:"Como você se sente?", a:"I feel happy", at:"Eu me sinto feliz", emoji:"😊"},
+  {q:"Are you hungry?", qt:"Você está com fome?", a:"Yes I am hungry", at:"Sim, estou com fome", emoji:"😋"},
+  {q:"Are you thirsty?", qt:"Você está com sede?", a:"Yes I am thirsty", at:"Sim, estou com sede", emoji:"🥵"},
+  {q:"What do you want to eat?", qt:"O que você quer comer?", a:"I want to eat pizza", at:"Quero comer pizza", emoji:"🍕"},
+  {q:"What do you want to drink?", qt:"O que você quer beber?", a:"I want to drink juice", at:"Quero beber suco", emoji:"🧃"},
+  {q:"Do you like dogs?", qt:"Você gosta de cachorros?", a:"Yes I love dogs", at:"Sim, adoro cachorros", emoji:"🐶"},
+  {q:"What is your pet's name?", qt:"Qual é o nome do seu bichinho?", a:"My pet's name is Rex", at:"Meu bichinho se chama Rex", emoji:"🐕"},
+  {q:"Is this your pencil?", qt:"Este é o seu lápis?", a:"No it is not", at:"Não, não é", emoji:"✏️"},
+  {q:"Where is your pencil?", qt:"Onde está o seu lápis?", a:"It is on the desk", at:"Está na carteira", emoji:"✏️"},
+  {q:"What do you do at school?", qt:"O que você faz na escola?", a:"I study and play", at:"Eu estudo e brinco", emoji:"🏫"},
+  {q:"Who is your best friend?", qt:"Quem é o seu melhor amigo?", a:"My best friend is Lucas", at:"Meu melhor amigo é o Lucas", emoji:"🧑‍🤝‍🧑"},
+  {q:"Do you like to draw?", qt:"Você gosta de desenhar?", a:"Yes I like to draw", at:"Sim, gosto de desenhar", emoji:"🎨"},
+  {q:"What do you draw?", qt:"O que você desenha?", a:"I draw a house", at:"Eu desenho uma casa", emoji:"🏠"},
+  {q:"What color is the banana?", qt:"De que cor é a banana?", a:"It is yellow", at:"É amarela", emoji:"🍌"},
+  {q:"How many apples?", qt:"Quantas maçãs?", a:"Two apples", at:"Duas maçãs", emoji:"🍎"},
+  {q:"What do you see in the sky?", qt:"O que você vê no céu?", a:"I see the sun", at:"Eu vejo o sol", emoji:"☀️"},
+  {q:"Is it raining?", qt:"Está chovendo?", a:"Yes it is raining", at:"Sim, está chovendo", emoji:"🌧️"},
+  {q:"Is it hot today?", qt:"Está quente hoje?", a:"Yes it is very hot", at:"Sim, está muito quente", emoji:"🥵"},
+  {q:"Do you like winter?", qt:"Você gosta do inverno?", a:"Yes I like winter", at:"Sim, gosto do inverno", emoji:"❄️"},
+  {q:"What month is it?", qt:"Que mês é?", a:"It is June", at:"É junho", emoji:"📅"},
+  {q:"When is your birthday?", qt:"Quando é o seu aniversário?", a:"It is in May", at:"É em maio", emoji:"🎂"},
+  {q:"Where do you sleep?", qt:"Onde você dorme?", a:"I sleep in my bed", at:"Durmo na minha cama", emoji:"🛏️"},
+  {q:"What time do you wake up?", qt:"Que horas você acorda?", a:"I wake up at seven", at:"Acordo às sete", emoji:"⏰"},
+  {q:"What time do you go to school?", qt:"Que horas você vai à escola?", a:"I go at eight", at:"Vou às oito", emoji:"🏫"},
+  {q:"Do you brush your teeth?", qt:"Você escova os dentes?", a:"Yes I brush my teeth", at:"Sim, escovo os dentes", emoji:"🪥"},
+  {q:"What is your favorite fruit?", qt:"Qual é a sua fruta favorita?", a:"My favorite fruit is strawberry", at:"Minha fruta favorita é morango", emoji:"🍓"},
+  {q:"Do you like vegetables?", qt:"Você gosta de vegetais?", a:"Yes I like carrots", at:"Sim, gosto de cenoura", emoji:"🥕"},
+  {q:"What animal is big?", qt:"Que animal é grande?", a:"The elephant is big", at:"O elefante é grande", emoji:"🐘"},
+  {q:"What animal can fly?", qt:"Que animal pode voar?", a:"The bird can fly", at:"O pássaro pode voar", emoji:"🐦"},
+  {q:"Where does the fish live?", qt:"Onde vive o peixe?", a:"The fish lives in water", at:"O peixe vive na água", emoji:"🐟"},
+  {q:"What color is the grass?", qt:"De que cor é a grama?", a:"It is green", at:"É verde", emoji:"🟢"},
+  {q:"Can you ride a bike?", qt:"Você sabe andar de bicicleta?", a:"Yes I can ride a bike", at:"Sim, sei andar de bicicleta", emoji:"🚲"},
+  {q:"Do you play soccer?", qt:"Você joga futebol?", a:"Yes I play soccer", at:"Sim, jogo futebol", emoji:"⚽"},
+  {q:"What is your favorite sport?", qt:"Qual é o seu esporte favorito?", a:"My favorite sport is soccer", at:"Meu esporte favorito é futebol", emoji:"⚽"},
+  {q:"Good job!", qt:"Bom trabalho!", a:"Thank you!", at:"Obrigado!", emoji:"👏"},
+];
+
+const CONQUISTAS = [
+  {id:'c1', nome:'Primeira Lição', emoji:'🎓', desc:'Complete 1 lição', cond:()=>Object.keys(CROWNS).length>=1},
+  {id:'c2', nome:'5 Lições', emoji:'📚', desc:'Complete 5 lições', cond:()=>Object.keys(CROWNS).length>=5},
+  {id:'c3', nome:'20 Lições', emoji:'👑', desc:'Complete 20 lições', cond:()=>Object.keys(CROWNS).length>=20},
+  {id:'c4', nome:'Mestre!', emoji:'🏆', desc:'Complete todas as lições', cond:()=>Object.keys(CROWNS).length>=LICOES.length},
+  {id:'c5', nome:'100 XP', emoji:'⚡', desc:'Acumule 100 XP', cond:()=>XP>=100},
+  {id:'c6', nome:'7 Dias', emoji:'🔥', desc:'Jogue 7 dias seguidos', cond:()=>streak>=7},
+  {id:'c7', nome:'Perfeito!', emoji:'🌟', desc:'Complete lição sem errar', cond:()=>localStorage.getItem('ik_perfeito')==='1'},
+  {id:'c8', nome:'Estourador', emoji:'🎈', desc:'10 pontos nos balões', cond:()=>parseInt(localStorage.getItem('ik_balaoBest')||'0')>=10},
+  {id:'c9', nome:'Mestre dos Balões', emoji:'💥', desc:'20 pontos nos balões', cond:()=>parseInt(localStorage.getItem('ik_balaoBest')||'0')>=20},
+  {id:'c10', nome:'Gênio da Matemática', emoji:'🧮', desc:'20 pontos na Corrida da Mente', cond:()=>parseInt(localStorage.getItem('ik_mathBest')||'0')>=20},
+];
+
+/* ===================== ESTADO ===================== */
+const META_DIARIA = 30, XP_POR_NIVEL = 50, MAX_CORACOES = 5, TEMPO_CORACAO = 5*60*1000;
+
+let nome = localStorage.getItem('ik_nome') || '';
+let XP = parseInt(localStorage.getItem('ik_xp')||'0');
+let CROWNS = JSON.parse(localStorage.getItem('ik_crowns')||'{}');
+let SOM = localStorage.getItem('ik_som') !== '0';
+let streak = parseInt(localStorage.getItem('ik_streak')||'0');
+let ultimoDia = localStorage.getItem('ik_ultimoDia') || '';
+let metaDia = localStorage.getItem('ik_metaDia') || '';
+let metaXP = parseInt(localStorage.getItem('ik_metaXP')||'0');
+let hearts = MAX_CORACOES;
+let CONQUISTAS_FEITAS = JSON.parse(localStorage.getItem('ik_conquistas')||'[]');
+
+let unidadeAtual = 0;
+let licaoAtual = null, exercicios = [], exIdx = 0, errosLicao = 0;
+let balaoJogo = null;
+let desafio = null;
+let fraseIdx = 0;
+let mascoteTimer = null;
+
+/* ===================== ÁUDIO ===================== */
+let audioCtx = null;
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function falar(txt){
+  if(!SOM || !('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang='en-US'; u.rate=0.82; u.pitch=1.15;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function falarPt(txt){
+  if(!SOM || !('speechSynthesis' in window)) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang='pt-BR'; u.rate=0.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function beepCerto(){
+  if(!SOM) return;
+  try{
+    const ctx=getAudioCtx();
+    [523,659,783].forEach((f,i)=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.frequency.value=f; o.type='triangle'; g.gain.value=0.15;
+      o.connect(g); g.connect(ctx.destination);
+      o.start(ctx.currentTime+i*0.1); o.stop(ctx.currentTime+i*0.1+0.15);
+    });
+  }catch(e){}
+}
+function beepErro(){
+  if(!SOM) return;
+  try{
+    const ctx=getAudioCtx();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.frequency.value=180; o.type='sawtooth'; g.gain.value=0.08;
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime+0.25);
+  }catch(e){}
+}
+function alternarSom(){ SOM=!SOM; localStorage.setItem('ik_som', SOM?'1':'0'); atualizarHeader(); }
+
+/* ===================== UTILITÁRIOS ===================== */
+function embaralhar(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function hoje(){ return new Date().toISOString().slice(0,10); }
+function normalizar(t){ return (t||'').toLowerCase().replace(/[^a-z ]/g,'').trim(); }
+function palavraParecida(falado, alvo){
+  const a=normalizar(falado), b=normalizar(alvo);
+  if(!a||!b) return false;
+  return a===b;
+}
+
+/* ===================== EFEITOS ===================== */
+const PARTS=['⭐','🎈','☁️','🦋','🌸','🎵','✨','🌙','🍃','💫'];
+function criarParticula(){
+  const p=document.createElement('div'); p.className='particula';
+  p.textContent=PARTS[Math.floor(Math.random()*PARTS.length)];
+  p.style.left=Math.random()*100+'vw'; p.style.fontSize=(20+Math.random()*22)+'px';
+  p.style.animationDuration=(5+Math.random()*8)+'s'; p.style.opacity=(.25+Math.random()*.45);
+  document.getElementById('fundo-animado').appendChild(p);
+  setTimeout(()=>p.remove(), 7000);
+}
+function confete(){
+  const emoj=['🎉','⭐','🎈','✨','💚','🎊'];
+  for(let i=0;i<22;i++){
+    const d=document.createElement('div'); d.className='confete';
+    d.textContent=emoj[Math.floor(Math.random()*emoj.length)];
+    d.style.left=Math.random()*100+'vw';
+    d.style.animationDuration=(1.2+Math.random()*1.6)+'s';
+    d.style.fontSize=(18+Math.random()*22)+'px';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), 3000);
+  }
+}
+function burst(el){
+  if(!el) return;
+  const r=el.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  const emoj=['⭐','✨','💥','🎉'];
+  for(let i=0;i<8;i++){
+    const d=document.createElement('div'); d.className='burst';
+    d.textContent=emoj[Math.floor(Math.random()*emoj.length)];
+    d.style.left=cx+'px'; d.style.top=cy+'px';
+    d.style.setProperty('--dx', Math.cos(i*Math.PI/4)*70+'px');
+    d.style.setProperty('--dy', Math.sin(i*Math.PI/4)*70+'px');
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), 700);
+  }
+}
+function setMascote(msg, emoji){
+  const el=document.getElementById('mascote-fala');
+  el.textContent=msg; el.classList.add('visivel');
+  document.querySelector('#mascote .coruja').textContent = emoji || '🦉';
+  clearTimeout(mascoteTimer);
+  mascoteTimer=setTimeout(()=>{ el.classList.remove('visivel'); document.querySelector('#mascote .coruja').textContent='🦉'; }, 2600);
+}
+function mostrarToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('visivel');
+  setTimeout(()=>t.classList.remove('visivel'), 3400);
+}
+
+/* ===================== CORAÇÕES ===================== */
+function carregarHearts(){
+  let h = parseInt(localStorage.getItem('ik_hearts')||'5');
+  let t = parseInt(localStorage.getItem('ik_heartsTime')||'0');
+  if(h < MAX_CORACOES){
+    const ganhos = Math.floor((Date.now()-t)/TEMPO_CORACAO);
+    if(ganhos>0){
+      h = Math.min(MAX_CORACOES, h+ganhos);
+      t = (h<MAX_CORACOES) ? Date.now() : 0;
+      localStorage.setItem('ik_hearts', h);
+      localStorage.setItem('ik_heartsTime', t);
+    }
+  }
+  hearts = h;
+}
+function perderCoracao(){
+  if(hearts === MAX_CORACOES) localStorage.setItem('ik_heartsTime', Date.now());
+  hearts = Math.max(0, hearts-1);
+  localStorage.setItem('ik_hearts', hearts);
+  atualizarHeader();
+  const c=document.getElementById('corao-licao'); if(c) c.textContent='❤️ '+hearts;
+}
+function mostrarAvisoCoroes(){ mostrarToast('❤️ Sem vidas! Espere um pouquinho...'); setMascote('Sem vidas! 😢'); }
+
+/* ===================== XP / STREAK ===================== */
+function getNivel(){ return Math.floor(XP/XP_POR_NIVEL)+1; }
+function getProgressoNivel(){ return XP % XP_POR_NIVEL; }
+function registrarDia(){
+  const h = hoje();
+  if(ultimoDia === h) return;
+  const ontem = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  streak = (ultimoDia===ontem) ? streak+1 : 1;
+  ultimoDia = h;
+  localStorage.setItem('ik_streak', streak);
+  localStorage.setItem('ik_ultimoDia', ultimoDia);
+  atualizarHeader(); verificarConquistas();
+}
+function addXP(qtd){
+  XP += qtd;
+  localStorage.setItem('ik_xp', XP);
+  if(metaDia !== hoje()){ metaDia = hoje(); metaXP = 0; }
+  metaXP += qtd;
+  localStorage.setItem('ik_metaDia', metaDia);
+  localStorage.setItem('ik_metaXP', metaXP);
+  registrarDia();
+  atualizarHeader();
+  verificarConquistas();
+}
+
+/* ===================== HEADER / TELAS ===================== */
+function atualizarHeader(){
+  document.getElementById('stat-xp').textContent='⚡ '+XP;
+  document.getElementById('stat-streak').textContent='🔥 '+streak;
+  document.getElementById('stat-hearts').textContent='❤️ '+hearts;
+  document.getElementById('btn-som').textContent=SOM?'🔊':'🔇';
+}
+function mostrarTela(id){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+
+/* ===================== NOME ===================== */
+function guardarNome(){
+  const v=document.getElementById('input-nome').value.trim();
+  if(!v){ alert('Digite seu nome!'); return; }
+  nome=v; localStorage.setItem('ik_nome', v);
+  document.getElementById('overlay-nome').style.display='none';
+  renderHome(); confete(); setMascote('Olá, '+v+'! Vamos aprender? 🎉');
+}
+function resetaTudo(){ if(!confirm('⚠️ Tem certeza que quer apagar TUDO?')) return; localStorage.clear(); location.reload(); }
+
+/* ===================== HOME ===================== */
+function renderHome(){
+  document.getElementById('nome-display').textContent = nome || 'amiguinho';
+  document.getElementById('nivel').textContent = 'Nível '+getNivel();
+  const prog = getProgressoNivel();
+  document.getElementById('xp-barra').style.width = Math.round(prog/XP_POR_NIVEL*100)+'%';
+  document.getElementById('xp-texto').textContent = prog+' / '+XP_POR_NIVEL+' XP';
+  document.getElementById('meta-diaria').textContent = (metaDia===hoje()?metaXP:0)+'/'+META_DIARIA+' XP';
+  document.getElementById('aviso-corao').textContent = hearts<=0 ? '💔 Sem vidas! Espere regenerar.' : (hearts<MAX_CORACOES ? '⏳ Vidas voltando aos poucos...' : '');
+
+  const abas=document.getElementById('abas-unidades'); abas.innerHTML='';
+  UNIDADES.forEach((u,i)=>{
+    const b=document.createElement('button');
+    b.className='aba'+(i===unidadeAtual?' ativa':'');
+    b.style.borderColor=u.cor;
+    b.textContent=u.emoji+' '+u.titulo;
+    b.onclick=()=>setUnidade(i);
+    abas.appendChild(b);
+  });
+
+  const licoesUnidade = LICOES.filter(l=>l.unidade===UNIDADES[unidadeAtual].id);
+  const cam=document.getElementById('caminho'); cam.innerHTML='';
+  licoesUnidade.forEach(l=>{
+    const c = CROWNS[l.id]||0;
+    const desbl = estaDesbloqueada(l.id);
+    const no=document.createElement('div');
+    no.className='no'+(desbl?'':' bloqueado');
+    no.style.setProperty('--cor', l.cor);
+    no.innerHTML=`<div class="no-emoji">${desbl?l.emoji:'🔒'}</div>
+      <div class="no-titulo">${l.titulo}</div>
+      <div class="no-coroas">${'👑'.repeat(c)}<span class="cir">${'○'.repeat(3-c)}</span></div>`;
+    no.onclick=()=>clicarLicao(l.id);
+    cam.appendChild(no);
+  });
+  atualizarHeader();
+}
+function setUnidade(i){ unidadeAtual=i; renderHome(); }
+function estaDesbloqueada(id){
+  const l = LICOES.find(x=>x.id===id);
+  const licoesUnidade = LICOES.filter(x=>x.unidade===l.unidade);
+  const pos = licoesUnidade.findIndex(x=>x.id===id);
+  if(pos===0) return true;
+  return (CROWNS[licoesUnidade[pos-1].id]||0) >= 1;
+}
+function clicarLicao(id){
+  if(!estaDesbloqueada(id)){ beepErro(); setMascote('Complete a lição anterior! 🔒'); return; }
+  if(hearts<=0){ mostrarAvisoCoroes(); return; }
+  iniciarLicao(LICOES.find(x=>x.id===id));
+}
+
+/* ===================== LIÇÃO ===================== */
+function iniciarLicao(licao){
+  licaoAtual = licao;
+  exIdx = 0; errosLicao = 0;
+  exercicios = gerarExercicios(licao);
+  mostrarTela('tela-licao');
+  document.getElementById('corao-licao').textContent='❤️ '+hearts;
+  renderIntro(licao);
+}
+function sairLicao(){ licaoAtual=null; mostrarTela('tela-home'); renderHome(); }
+
+function renderIntro(licao){
+  const c=document.getElementById('licao-conteudo');
+  c.innerHTML = `<div class="intro-card">
+    <h2>${licao.emoji} ${licao.titulo}</h2>
+    <p class="intro-sub">Memorize as palavras antes de praticar! 🔊</p>
+    <div class="lista-palavras"></div>
+    <div style="text-align:center;"><button class="btn btn-verde btn-grande" id="btn-comecar">🚀 Começar</button></div>
+  </div>`;
+  const lista=c.querySelector('.lista-palavras');
+  licao.palavras.forEach(w=>{
+    const d=document.createElement('div'); d.className='item-palavra';
+    d.innerHTML=`<span class="emoji">${w.emoji}</span><span class="en">${w.en}</span><span class="pt">${w.pt}</span><button class="btn-mini">🔊</button>`;
+    d.querySelector('button').onclick=()=>falar(w.en);
+    lista.appendChild(d);
+  });
+  document.getElementById('btn-comecar').onclick=()=>renderExercicio();
+}
+
+function gerarExercicios(licao){
+  const tipos=['escolha','escrita','ouvir','falar'];
+  return embaralhar(licao.palavras).slice(0,6).map((w,i)=>({tipo:tipos[i%4], palavra:w}));
+}
+function distratores(palavra, n){
+  return embaralhar(TODAS_PALAVRAS.filter(p=>p.en!==palavra.en)).slice(0,n).map(p=>p.en);
+}
+function atualizarProgresso(){
+  document.getElementById('progresso-licao').style.width = Math.round((exIdx/exercicios.length)*100)+'%';
+}
+function avancarExercicio(){ exIdx++; renderExercicio(); }
+
+function renderExercicio(){
+  if(exIdx >= exercicios.length){ concluirLicao(); return; }
+  atualizarProgresso();
+  const ex=exercicios[exIdx];
+  const c=document.getElementById('licao-conteudo');
+  if(ex.tipo==='escolha') renderEscolha(c, ex);
+  else if(ex.tipo==='escrita') renderEscrita(c, ex);
+  else if(ex.tipo==='ouvir') renderOuvir(c, ex);
+  else renderFalar(c, ex);
+}
+
+function renderEscolha(c, ex){
+  const w=ex.palavra;
+  const opcoes=embaralhar([w.en, ...distratores(w,3)]);
+  c.innerHTML=`<div class="ex-titulo">O que significa? 🤔</div>
+    <div class="ex-emoji">${w.emoji}</div>
+    <div class="ex-dica">${w.pt}</div>
+    <div class="opcoes" id="opcoes-ex"></div>
+    <div style="text-align:center;"><button class="btn-mini" onclick="falar('${w.en}')">🔊 Ouvir</button></div>`;
+  const cont=document.getElementById('opcoes-ex'); let resp=false;
+  opcoes.forEach(o=>{
+    const b=document.createElement('button'); b.className='opcao'; b.textContent=o;
+    b.onclick=()=>{
+      if(resp) return; resp=true;
+      if(o===w.en){ b.classList.add('certa'); beepCerto(); falar(w.en); confete(); setMascote('Muito bem! 😊'); setTimeout(avancarExercicio, 1000); }
+      else{ b.classList.add('errada'); cont.querySelectorAll('.opcao').forEach(x=>{ if(x.textContent===w.en) x.classList.add('certa'); }); beepErro(); falar(w.en); setMascote('Quase! 😢'); errosLicao++; perderCoracao(); setTimeout(avancarExercicio, 1800); }
+    };
+    cont.appendChild(b);
+  });
+}
+function renderEscrita(c, ex){
+  const w=ex.palavra;
+  c.innerHTML=`<div class="ex-titulo">✍️ Escreva em inglês!</div>
+    <div class="ex-emoji">${w.emoji}</div>
+    <div class="ex-dica">${w.pt}</div>
+    <div class="area-escrever">
+      <input type="text" id="input-ex" placeholder="Digite a palavra..." maxlength="20" autocomplete="off" autocapitalize="off" autocorrect="off"/>
+      <button class="btn btn-verde" onclick="verificarEscrita()">✅</button>
+    </div>
+    <div class="msg-write" id="msg-ex"></div>
+    <div style="text-align:center;"><button class="btn-mini" onclick="falar('${w.en}')">🔊 Ouvir</button></div>`;
+  const inp=document.getElementById('input-ex');
+  setTimeout(()=>inp.focus(), 100);
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') verificarEscrita(); });
+}
+function verificarEscrita(){
+  const w=exercicios[exIdx].palavra;
+  const inp=document.getElementById('input-ex');
+  const v=normalizar(inp.value);
+  const msg=document.getElementById('msg-ex');
+  if(!v){ msg.textContent='Digite a palavra! ✏️'; return; }
+  if(v===normalizar(w.en)){ msg.innerHTML='✅ Perfeito!'; beepCerto(); falar(w.en); confete(); setMascote('Mandou bem! 😊'); setTimeout(avancarExercicio, 1000); }
+  else{ msg.innerHTML='❌ A certa é: <b>'+w.en+'</b>'; beepErro(); falar(w.en); setMascote('Quase! 😢'); errosLicao++; perderCoracao(); setTimeout(avancarExercicio, 1800); }
+}
+function renderOuvir(c, ex){
+  const w=ex.palavra;
+  const opcoes=embaralhar([w.en, ...distratores(w,3)]);
+  c.innerHTML=`<div class="ex-titulo">👂 Escute e escolha!</div>
+    <div class="ex-emoji">${w.emoji}</div>
+    <div class="opcoes" id="opcoes-ex"></div>`;
+  const cont=document.getElementById('opcoes-ex'); let resp=false;
+  opcoes.forEach(o=>{
+    const b=document.createElement('button'); b.className='opcao'; b.textContent=o;
+    b.onclick=()=>{
+      if(resp) return; resp=true;
+      if(o===w.en){ b.classList.add('certa'); beepCerto(); falar(w.en); confete(); setMascote('Você acertou! 😊'); setTimeout(avancarExercicio, 1000); }
+      else{ b.classList.add('errada'); cont.querySelectorAll('.opcao').forEach(x=>{ if(x.textContent===w.en) x.classList.add('certa'); }); beepErro(); falar(w.en); setMascote('Opa! 😢'); errosLicao++; perderCoracao(); setTimeout(avancarExercicio, 1800); }
+    };
+    cont.appendChild(b);
+  });
+  setTimeout(()=>falar(w.en), 400);
+}
+
+/* ===================== EXERCÍCIO DE FALA (MICROFONE CORRIGIDO) ===================== */
+let reconhecimento = null;
+let micAtivo = false;
+let micPermitido = false;
+
+function temMicrofone(){
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+}
+
+async function garantirPermissaoMic(){
+  if(micPermitido) return true;
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      stream.getTracks().forEach(t=>t.stop());
+      micPermitido = true;
+      return true;
+    }catch(err){
+      if(err && (err.name==='NotAllowedError' || err.name==='PermissionDeniedError')){
+        return false;
+      }
+      return true;
+    }
+  }
+  return true;
+}
+
+function pararMic(){
+  micAtivo = false;
+  if(reconhecimento){ try{ reconhecimento.stop(); }catch(e){} }
+}
+
+function iniciarReconhecimento(w, status, ouvida, msg, respondidoRef){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  try{ reconhecimento = new SR(); }
+  catch(e){ msg.innerHTML='🎤 Navegador não suporta microfone.'; return; }
+
+  reconhecimento.lang='en-US';
+  reconhecimento.interimResults=false;
+  reconhecimento.maxAlternatives=5;
+  reconhecimento.continuous=false;
+
+  reconhecimento.onstart=()=>{
+    micAtivo=true;
+    const btn=document.getElementById('btn-mic'); if(btn) btn.classList.add('ouvindo');
+    status.textContent='🎙️ Ouvindo... fale agora!';
+    status.classList.add('ativo');
+    ouvida.textContent='';
+  };
+  reconhecimento.onresult=(e)=>{
+    const alternativas = Array.from(e.results[0]).map(r=>r.transcript);
+    ouvida.textContent='Você disse: "'+alternativas[0]+'"';
+    const acertou = alternativas.some(a=>palavraParecida(a, w.en));
+    const btn=document.getElementById('btn-mic'); if(btn) btn.classList.remove('ouvindo');
+    status.textContent='✅ Terminou!';
+    status.classList.remove('ativo');
+    micAtivo=false;
+    if(respondidoRef.valor) return;
+    respondidoRef.valor=true;
+    if(acertou){
+      msg.innerHTML='✅ Você falou certo! 🎉';
+      beepCerto(); falar(w.en); confete(); setMascote('Que pronúncia! 😊');
+      setTimeout(avancarExercicio, 1200);
+    }else{
+      msg.innerHTML='❌ Quase! A certa é: <b>'+w.en+'</b>';
+      beepErro(); falar(w.en); setMascote('Tente de novo! 😉');
+      errosLicao++; perderCoracao();
+      setTimeout(avancarExercicio, 2200);
+    }
+  };
+  reconhecimento.onerror=(e)=>{
+    micAtivo=false;
+    const btn=document.getElementById('btn-mic'); if(btn) btn.classList.remove('ouvindo');
+    status.classList.remove('ativo');
+    if(e.error==='not-allowed' || e.error==='permission-denied'){
+      status.textContent='🔒 Permita o microfone nas configurações!';
+      mostrarToast('🎤 Permita o acesso ao microfone!');
+    } else if(e.error==='no-speech'){
+      status.textContent='🤫 Não ouvi nada, tente de novo!';
+    } else if(e.error==='network'){
+      status.textContent='🌐 Precisa de internet para o microfone!';
+      mostrarToast('🌐 O microfone precisa de internet!');
+    } else if(e.error==='aborted'){
+      status.textContent='Parado.';
+    } else {
+      status.textContent='⚠️ Erro: '+e.error;
+    }
+  };
+  reconhecimento.onend=()=>{
+    micAtivo=false;
+    const btn=document.getElementById('btn-mic'); if(btn) btn.classList.remove('ouvindo');
+    if(status.textContent==='🎙️ Ouvindo... fale agora!'){ status.textContent='Tente de novo!'; }
+  };
+  try{ reconhecimento.start(); }catch(err){}
+}
+
+function renderFalar(c, ex){
+  const w=ex.palavra;
+  const suportado = temMicrofone();
+  c.innerHTML=`<div class="ex-titulo">🎤 Fale em inglês!</div>
+    <div class="ex-emoji">${w.emoji}</div>
+    <div class="ex-dica">Diga: <b>${w.pt}</b> (${w.en})</div>
+    <div class="mic-area">
+      <button class="btn-mic" id="btn-mic" ${suportado?'':'disabled'}><span class="icone-mic" style="color:#4d96ff;">🎤</span></button>
+      <div class="mic-status" id="mic-status">${suportado?'Toque no microfone e fale!':'🎤 Microfone não suportado neste navegador'}</div>
+      <div class="palavra-ouvida" id="palavra-ouvida"></div>
+    </div>
+    <div class="msg-write" id="msg-ex"></div>
+    <div style="text-align:center;">
+      <button class="btn-mini" onclick="falar('${w.en}')">🔊 Ouvir</button>
+    </div>`;
+  const btn=document.getElementById('btn-mic');
+  const status=document.getElementById('mic-status');
+  const ouvida=document.getElementById('palavra-ouvida');
+  const msg=document.getElementById('msg-ex');
+  const respondidoRef={valor:false};
+
+  btn.onclick=async ()=>{
+    if(!suportado || respondidoRef.valor) return;
+    if(micAtivo){ pararMic(); status.textContent='Parado.'; status.classList.remove('ativo'); return; }
+
+    status.textContent='🔓 Pedindo permissão do microfone...';
+    const permitido = await garantirPermissaoMic();
+    if(!permitido){
+      status.textContent='🔒 Você negou! Permita o microfone nas configurações.';
+      mostrarToast('🎤 Permita o microfone nas configurações do navegador!');
+      setMascote('Preciso do microfone! 🎤');
+      return;
+    }
+    iniciarReconhecimento(w, status, ouvida, msg, respondidoRef);
+  };
+}
+
+function concluirLicao(){
+  const l=licaoAtual;
+  const atual=CROWNS[l.id]||0;
+  CROWNS[l.id]=Math.min(3, atual+1);
+  localStorage.setItem('ik_crowns', JSON.stringify(CROWNS));
+  addXP(10);
+  if(errosLicao===0) localStorage.setItem('ik_perfeito','1');
+  confete(); setMascote('Parabéns! 🏆');
+  document.getElementById('licao-conteudo').innerHTML=`<div class="fim-card">
+    <div class="trofeu">${'👑'.repeat(CROWNS[l.id])||'🎉'}</div>
+    <h2>Lição completa!</h2>
+    <div style="font-size:22px; color:#58cc02; font-weight:bold;">+10 XP ⚡</div>
+    <p style="color:#888; font-weight:bold;">${l.emoji} ${l.titulo}</p>
+    <button class="btn btn-verde btn-grande" onclick="mostrarTela('tela-home');renderHome();">🏠 Voltar</button>
+  </div>`;
+}
+
+/* ===================== FRASES ===================== */
+function abrirFrases(){ fraseIdx = 0; mostrarTela('tela-frases'); renderFrase(); }
+function gerarOpcoesFrase(f){
+  const outras = FRASES.filter(x=>x.a!==f.a).map(x=>x.a);
+  const erradas = embaralhar(outras).slice(0,3);
+  return embaralhar([f.a, ...erradas]);
+}
+function renderFrase(){
+  const f=FRASES[fraseIdx];
+  const c=document.getElementById('frase-conteudo');
+  const opcoes=gerarOpcoesFrase(f);
+  c.innerHTML=`<div class="frase-card">
+    <div class="contador-frases">💬 Frase ${fraseIdx+1} de ${FRASES.length}</div>
+    <div class="bolha">
+      <div class="bolha-quem">🧒 Amigo pergunta:</div>
+      <div class="bolha-texto">${f.q}</div>
+      <div class="bolha-pt">${f.qt}</div>
+      <button class="btn-mini" onclick="falar('${f.q.replace(/'/g,"\\'")}')">🔊 Ouvir</button>
+    </div>
+    <div class="ex-titulo" style="font-size:20px;">🤔 Qual é a resposta certa?</div>
+    <div class="ex-dica">${f.emoji} ${f.at}</div>
+    <div class="opcoes opcoes-frase" id="opcoes-frase"></div>
+    <div class="msg-write" id="msg-frase"></div>
+  </div>`;
+  setTimeout(()=>falar(f.q), 500);
+  const cont=document.getElementById('opcoes-frase'); let resp=false;
+  opcoes.forEach((op,i)=>{
+    const b=document.createElement('button'); b.className='opcao';
+    b.style.animationDelay=(i*0.08)+'s'; b.textContent=op;
+    b.onclick=()=>{
+      if(resp) return; resp=true;
+      if(op===f.a){
+        b.classList.add('certa');
+        document.getElementById('msg-frase').innerHTML='✅ Perfeito!';
+        beepCerto(); falar(f.a); confete(); setMascote('Você é demais! 😊');
+        setTimeout(proximaFrase, 1400);
+      } else {
+        b.classList.add('errada');
+        cont.querySelectorAll('.opcao').forEach(x=>{ if(x.textContent===f.a) x.classList.add('certa'); });
+        document.getElementById('msg-frase').innerHTML='❌ A certa é: <b>'+f.a+'</b>';
+        beepErro(); falar(f.a); setMascote('Quase! 😢');
+        setTimeout(proximaFrase, 2200);
+      }
+    };
+    cont.appendChild(b);
+  });
+}
+function proximaFrase(){
+  fraseIdx++;
+  if(fraseIdx>=FRASES.length){
+    document.getElementById('frase-conteudo').innerHTML=`<div class="fim-card">
+      <div class="trofeu">🎉</div>
+      <h2>Parabéns, ${nome||'amiguinho'}!</h2>
+      <p style="color:#888;font-weight:bold;">Você praticou todas as ${FRASES.length} frases! 👏</p>
+      <button class="btn btn-verde btn-grande" onclick="mostrarTela('tela-home');renderHome();">🏠 Voltar</button>
+    </div>`;
+    return;
+  }
+  renderFrase();
+}
+
+/* ===================== BALÕES ===================== */
+const CORES_BALOES=['#e07000','#0066cc','#00cc66','#cc0066','#6699cc','#cc6600','#009966','#666699'];
+function iniciarBaloes(){ mostrarTela('tela-baloes'); resetBaloes(); }
+function resetBaloes(){
+  if(balaoJogo && balaoJogo.raf) cancelAnimationFrame(balaoJogo.raf);
+  if(balaoJogo && balaoJogo.spawnID) clearInterval(balaoJogo.spawnID);
+  if(balaoJogo && balaoJogo.timerID) clearInterval(balaoJogo.timerID);
+  document.getElementById('area-baloes').innerHTML='';
+  balaoJogo={ pontos:0, tempo:60, alvo:null, baloes:[], ativo:true, spawnID:null, timerID:null, raf:null };
+  document.getElementById('baloes-pontos').textContent='⭐ 0';
+  document.getElementById('baloes-tempo').textContent='⏱️ 60s';
+  novoAlvo();
+  balaoJogo.timerID=setInterval(()=>{
+    balaoJogo.tempo--;
+    document.getElementById('baloes-tempo').textContent='⏱️ '+balaoJogo.tempo+'s';
+    if(balaoJogo.tempo<=0) fimBaloes();
+  },1000);
+  balaoJogo.spawnID=setInterval(spawnBalao, 1400);
+  spawnBalao();
+  balaoJogo.raf=requestAnimationFrame(loopBaloes);
+}
+function novoAlvo(){
+  balaoJogo.alvo=TODAS_PALAVRAS[Math.floor(Math.random()*TODAS_PALAVRAS.length)];
+  document.getElementById('baloes-alvo').innerHTML=`🎈 Encontre: <b>${balaoJogo.alvo.pt}</b> <button class="btn-mini" onclick="falar('${balaoJogo.alvo.en}')">🔊</button>`;
+}
+function spawnBalao(){
+  if(!balaoJogo.ativo) return;
+  const area=document.getElementById('area-baloes');
+  const temAlvo = balaoJogo.baloes.some(b=>b.isAlvo && !b.rem);
+  let palavra, isAlvo;
+  if(!temAlvo){ palavra=balaoJogo.alvo; isAlvo=true; }
+  else { palavra=TODAS_PALAVRAS[Math.floor(Math.random()*TODAS_PALAVRAS.length)]; isAlvo=false; }
+  const b={ palavra, isAlvo, y:0, vy:0.4+Math.random()*0.6, el:null, rem:false };
+  const div=document.createElement('div');
+  div.className='balao'; div.style.left=(8+Math.random()*78)+'%';
+  const cor=CORES_BALOES[Math.floor(Math.random()*CORES_BALOES.length)];
+  div.innerHTML=`<div class="corpo" style="background:${cor};">${palavra.en}</div>`;
+  div.onclick=()=>clicarBalao(b);
+  area.appendChild(div); b.el=div;
+  balaoJogo.baloes.push(b);
+}
+function loopBaloes(){
+  if(!balaoJogo || !balaoJogo.ativo) return;
+  const area=document.getElementById('area-baloes');
+  const h=area.clientHeight;
+  balaoJogo.baloes.forEach(b=>{
+    b.y+=b.vy;
+    if(b.el) b.el.style.bottom=b.y+'px';
+    if(b.y>h-100 && !b.rem){
+      b.rem=true;
+      if(b.el) b.el.remove();
+      if(b.isAlvo) perderBalao();
+    }
+  });
+  balaoJogo.baloes=balaoJogo.baloes.filter(b=>!b.rem);
+  balaoJogo.raf=requestAnimationFrame(loopBaloes);
+}
+function perderBalao(){
+  balaoJogo.pontos=Math.max(0, balaoJogo.pontos-1);
+  document.getElementById('baloes-pontos').textContent='⭐ '+balaoJogo.pontos;
+  novoAlvo();
+}
+function clicarBalao(b){
+  if(!balaoJogo.ativo || b.rem) return;
+  if(b.isAlvo){
+    b.rem=true;
+    burst(b.el); if(b.el) b.el.classList.add('corte');
+    setTimeout(()=>b.el&&b.el.remove(), 350);
+    balaoJogo.pontos++;
+    document.getElementById('baloes-pontos').textContent='⭐ '+balaoJogo.pontos;
+    beepCerto(); falar(b.palavra.en); setMascote('Uau! 😊');
+    novoAlvo();
+  } else {
+    balaoJogo.pontos=Math.max(0, balaoJogo.pontos-1);
+    document.getElementById('baloes-pontos').textContent='⭐ '+balaoJogo.pontos;
+    beepErro(); setMascote('Ops! 😢'); if(b.el) b.el.classList.add('treme');
+  }
+}
+function fimBaloes(){
+  balaoJogo.ativo=false;
+  cancelAnimationFrame(balaoJogo.raf);
+  clearInterval(balaoJogo.spawnID);
+  clearInterval(balaoJogo.timerID);
+  const pts=balaoJogo.pontos;
+  const best=parseInt(localStorage.getItem('ik_balaoBest')||'0');
+  const novo=pts>best;
+  if(novo) localStorage.setItem('ik_balaoBest', pts);
+  if(pts>0) addXP(pts);
+  confete(); setMascote(novo?'Novo recorde! 🤩':'Bom jogo! 🎉');
+  document.getElementById('area-baloes').innerHTML=`<div class="fim-balao">
+    <div class="trofeu">${novo?'🏆':'🎈'}</div>
+    <h2>Fim do jogo!</h2>
+    <div style="font-size:24px;">⭐ Pontos: ${pts}</div>
+    ${novo?'<div style="font-size:20px;color:#e07000;">🏆 Novo recorde!</div>':''}
+    ${pts>0?`<div style="color:#58cc02;font-weight:bold;">+${pts} XP ⚡</div>`:''}
+    <button class="btn btn-verde" onclick="resetBaloes()">🔁 Jogar de novo</button>
+    <button class="btn btn-azul" style="margin-top:8px;" onclick="mostrarTela('tela-home');renderHome();">🏠 Voltar</button>
+  </div>`;
+}
+function sairBaloes(){
+  if(balaoJogo){ balaoJogo.ativo=false; cancelAnimationFrame(balaoJogo.raf); clearInterval(balaoJogo.spawnID); clearInterval(balaoJogo.timerID); }
+  mostrarTela('tela-home'); renderHome();
+}
+
+/* ===================== DESAFIO ===================== */
+function iniciarDesafio(){
+  if(hearts<=0){ mostrarAvisoCoroes(); return; }
+  desafio={ perguntas: embaralhar(TODAS_PALAVRAS).slice(0,8), idx:0, pontos:0, tempo:60, ativo:true, timer:null };
+  mostrarTela('tela-desafio');
+  document.getElementById('desafio-pontos').textContent='⭐ 0';
+  document.getElementById('desafio-tempo').textContent='⏱️ 60s';
+  renderDesafioPergunta();
+  desafio.timer=setInterval(()=>{
+    desafio.tempo--;
+    document.getElementById('desafio-tempo').textContent='⏱️ '+desafio.tempo+'s';
+    if(desafio.tempo<=0) fimDesafio();
+  },1000);
+}
+function renderDesafioPergunta(){
+  if(!desafio.ativo) return;
+  if(desafio.idx>=desafio.perguntas.length){ fimDesafio(); return; }
+  const w=desafio.perguntas[desafio.idx];
+  const opcoes=embaralhar([w.en, ...distratores(w,3)]);
+  const c=document.getElementById('desafio-conteudo');
+  c.innerHTML=`<div class="ex-titulo">⏱️ O que significa?</div>
+    <div class="ex-emoji">${w.emoji}</div>
+    <div class="ex-dica">${w.pt}</div>
+    <div class="opcoes" id="opcoes-desafio"></div>`;
+  const cont=document.getElementById('opcoes-desafio'); let resp=false;
+  opcoes.forEach(o=>{
+    const b=document.createElement('button'); b.className='opcao'; b.textContent=o;
+    b.onclick=()=>{
+      if(resp) return; resp=true;
+      if(o===w.en){ b.classList.add('certa'); desafio.pontos++; beepCerto(); setMascote('Rápido! 😊'); }
+      else{ b.classList.add('errada'); cont.querySelectorAll('.opcao').forEach(x=>{ if(x.textContent===w.en) x.classList.add('certa'); }); beepErro(); desafio.tempo=Math.max(0, desafio.tempo-2); }
+      document.getElementById('desafio-pontos').textContent='⭐ '+desafio.pontos;
+      setTimeout(()=>{ desafio.idx++; renderDesafioPergunta(); }, 700);
+    };
+    cont.appendChild(b);
+  });
+}
+function fimDesafio(){
+  desafio.ativo=false;
+  clearInterval(desafio.timer);
+  const pts=desafio.pontos;
+  addXP(pts*2);
+  confete(); setMascote(pts>0?'Mandou bem! 🏁':'Boa tentativa! 💪');
+  document.getElementById('desafio-conteudo').innerHTML=`<div class="fim-card">
+    <div class="trofeu">🏁</div>
+    <h2>Fim do Desafio!</h2>
+    <div style="font-size:26px;">⭐ ${pts} pontos</div>
+    <div style="color:#58cc02;font-weight:bold;">+${pts*2} XP ⚡</div>
+    <button class="btn btn-verde btn-grande" onclick="mostrarTela('tela-home');renderHome();">🏠 Voltar</button>
+  </div>`;
+}
+function sairDesafio(){
+  if(desafio){ desafio.ativo=false; clearInterval(desafio.timer); }
+  mostrarTela('tela-home'); renderHome();
+}
+
+/* ===================== CONQUISTAS ===================== */
+function mostrarConquistas(){
+  const div=document.getElementById('badge-levels');
+  div.innerHTML = CONQUISTAS.map(a=>{
+    const ok=a.cond();
+    return `<div class="badge ${ok?'ok':''}">
+      <div class="badge-emoji">${ok?a.emoji:'🔒'}</div>
+      <div class="badge-nome">${a.nome}</div>
+      <div class="badge-desc">${a.desc}</div>
+    </div>`;
+  }).join('');
+  mostrarTela('tela-badges');
+}
+function verificarConquistas(){
+  CONQUISTAS.forEach(a=>{
+    if(a.cond() && !CONQUISTAS_FEITAS.includes(a.id)){
+      CONQUISTAS_FEITAS.push(a.id);
+      mostrarToast('🏅 Conquista: '+a.emoji+' '+a.nome);
+    }
+  });
+  localStorage.setItem('ik_conquistas', JSON.stringify(CONQUISTAS_FEITAS));
+}
+
+/* ===================== MATEMÁTICA ===================== */
+const LICOES_MAT = [
+  {id:'+', icone:'➕', titulo:'Adição (Somar)', resumo:'Juntar quantidades e contar tudo.', cor:'#58cc02', conteudo:`
+    <h3>➕ O que é Adição?</h3>
+    <p>A <b>adição</b> (ou soma) é quando a gente <b>junta</b> coisas e conta tudo junto.</p>
+    <div class="exemplo-mat">🍎🍎🍎 + 🍎🍎 = 🍎🍎🍎🍎🍎<br>3 + 2 = 5</div>
+    <h3>📖 Palavras que indicam soma:</h3>
+    <div class="dica-mat">💡 <b>Juntar</b>, <b>ganhar</b>, <b>receber</b>, <b>acrescentar</b>, <b>total</b>, <b>ao todo</b>.</div>
+    <h3>✏️ Exemplos:</h3>
+    <div class="exemplo-mat">12 + 7 = 19<br>25 + 15 = 40</div>
+    <div class="dica-mat">💡 <b>Dica:</b> some primeiro as unidades, depois as dezenas!</div>`},
+  {id:'-', icone:'➖', titulo:'Subtração (Diminuir)', resumo:'Tirar uma quantidade de outra.', cor:'#ff9600', conteudo:`
+    <h3>➖ O que é Subtração?</h3>
+    <p>A <b>subtração</b> (ou menos) é quando a gente <b>tira</b> uma quantidade de outra e vê quanto sobra.</p>
+    <div class="exemplo-mat">🍩🍩🍩🍩🍩 − 🍩🍩 = 🍩🍩🍩<br>5 − 2 = 3</div>
+    <h3>📖 Palavras que indicam subtração:</h3>
+    <div class="dica-mat">💡 <b>Tirar</b>, <b>perder</b>, <b>gastar</b>, <b>sobrar</b>, <b>restar</b>, <b>diferença</b>.</div>
+    <h3>✏️ Exemplos:</h3>
+    <div class="exemplo-mat">15 − 8 = 7<br>30 − 12 = 18</div>
+    <div class="dica-mat">💡 <b>Dica:</b> na subtração, o número de cima (maior) vem primeiro!</div>`},
+  {id:'x', icone:'✖️', titulo:'Multiplicação (Vezes)', resumo:'Somar várias vezes o mesmo número.', cor:'#4d96ff', conteudo:`
+    <h3>✖️ O que é Multiplicação?</h3>
+    <p>A <b>multiplicação</b> (ou vezes) é somar o <b>mesmo número várias vezes</b>. É mais rápido!</p>
+    <div class="exemplo-mat">3 × 4 = 3 + 3 + 3 + 3 = 12</div>
+    <h3>📖 Palavras que indicam multiplicação:</h3>
+    <div class="dica-mat">💡 <b>Vezes</b>, <b>dobro</b>, <b>triplo</b>, <b>cada</b>, <b>por</b>.</div>
+    <h3>✏️ Exemplos:</h3>
+    <div class="exemplo-mat">2 × 6 = 12<br>5 × 5 = 25<br>9 × 9 = 81</div>
+    <div class="dica-mat">💡 <b>Dica:</b> qualquer número × 0 = 0, e qualquer número × 1 = ele mesmo!</div>`},
+  {id:'÷', icone:'➗', titulo:'Divisão (Dividir)', resumo:'Repartir em partes iguais.', cor:'#9b5de5', conteudo:`
+    <h3>➗ O que é Divisão?</h3>
+    <p>A <b>divisão</b> é <b>repartir</b> uma quantidade em <b>partes iguais</b>.</p>
+    <div class="exemplo-mat">🍬🍬🍬🍬🍬🍬 → dividir entre 3 amigos<br>6 ÷ 3 = 2 (cada um fica com 2)</div>
+    <h3>📖 Palavras que indicam divisão:</h3>
+    <div class="dica-mat">💡 <b>Repartir</b>, <b>dividir</b>, <b>distribuir</b>, <b>metade</b>, <b>terça parte</b>.</div>
+    <h3>✏️ Exemplos:</h3>
+    <div class="exemplo-mat">12 ÷ 3 = 4<br>20 ÷ 4 = 5</div>
+    <div class="dica-mat">💡 <b>Dica:</b> a divisão é o contrário da multiplicação! Se 3 × 4 = 12, então 12 ÷ 3 = 4.</div>`},
+];
+
+let mathOp='+', mathTabuadaFixa=null, mathResp=0, mathBloq=false, mathTabuada=null;
+let mathAcertos=0, mathErros=0;
+let mathTimer=null, mathSeg=60, mathTimerAtivo=false;
+let memCartas=[], memVirada=null, memTravado=false, memPares=0;
+
+function abrirMatematica(){ mostrarTela('tela-matematica'); renderMathMenu(); }
+function sairMatematica(){ pararMathTimer(); mostrarTela('tela-home'); renderHome(); }
+
+function renderMathMenu(){
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`
+    <p style="text-align:center;color:#999;font-weight:bold;">Aprenda brincando com números! 🎈</p>
+    <div class="grade-math-menu">
+      <button class="cartao-math" style="background:linear-gradient(135deg,#ff6b9d,#ff5c8a);" onclick="renderTabuada()">
+        <span class="icone-math">🔢</span>Tabuada<span class="desc-math">Aprenda e pratique</span>
+      </button>
+      <button class="cartao-math" style="background:linear-gradient(135deg,#ff9600,#ffb36b);" onclick="renderPratica()">
+        <span class="icone-math">➕</span>Praticar Contas<span class="desc-math">Somar, menos, vezes, dividir</span>
+      </button>
+      <button class="cartao-math" style="background:linear-gradient(135deg,#9b5de5,#c39bff);" onclick="renderCorrida()">
+        <span class="icone-math">⚡</span>Corrida da Mente<span class="desc-math">Responda rápido!</span>
+      </button>
+      <button class="cartao-math" style="background:linear-gradient(135deg,#00b8b8,#6be7ef);" onclick="renderMemoria()">
+        <span class="icone-math">🃏</span>Jogo da Memória<span class="desc-math">Ache os pares</span>
+      </button>
+      <button class="cartao-math largo" style="background:linear-gradient(135deg,#4d96ff,#85a5ff);" onclick="renderLicoesMat()">
+        <span class="icone-math">📚</span>Lições<span class="desc-math">Aprenda os 4 tipos de conta</span>
+      </button>
+    </div>`;
+}
+
+/* --- TABUADA --- */
+function renderTabuada(){
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="renderMathMenu()">⬅️ Voltar</button></div>
+    <h2 style="text-align:center;color:#555;">🔢 Tabuada</h2>
+    <p style="text-align:center;color:#999;font-weight:bold;margin-bottom:14px;">Toque num número para ver a tabuada!</p>
+    <div class="grade-tabuada" id="grade-tabuada"></div>
+    <div class="math-cartao">
+      <div class="titulo-math" id="titulo-tabuada">Escolha uma tabuada 👆</div>
+      <div id="linhas-tabuada"></div>
+      <button class="btn btn-verde" id="btn-praticar-tabuada" style="display:none;width:100%;margin-top:14px;" onclick="praticarTabuadaAtual()">🎯 Praticar esta tabuada!</button>
+    </div>`;
+  const g=document.getElementById('grade-tabuada');
+  for(let i=1;i<=10;i++){
+    const b=document.createElement('button');
+    b.className='btn-num cor-n'+i;
+    b.textContent=i;
+    b.onclick=()=>mostrarTabuada(i);
+    g.appendChild(b);
+  }
+}
+function mostrarTabuada(n){
+  mathTabuada=n;
+  document.getElementById('titulo-tabuada').textContent='Tabuada do '+n+' 🎉';
+  const cont=document.getElementById('linhas-tabuada');
+  cont.innerHTML='';
+  for(let i=1;i<=10;i++){
+    const d=document.createElement('div');
+    d.className='linha-tabuada';
+    d.innerHTML='<span>'+n+' × '+i+'</span><span class="res-tabuada">= '+(n*i)+'</span>';
+    cont.appendChild(d);
+  }
+  document.getElementById('btn-praticar-tabuada').style.display='block';
+}
+function praticarTabuadaAtual(){
+  if(!mathTabuada) return;
+  renderPratica();
+  configPratica('x', mathTabuada);
+}
+
+/* --- PRATICAR CONTAS --- */
+function renderPratica(){
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="renderMathMenu()">⬅️ Voltar</button></div>
+    <h2 style="text-align:center;color:#555;">🎯 Praticar Contas</h2>
+    <p style="text-align:center;color:#999;font-weight:bold;margin-bottom:14px;">Escolha o tipo de conta:</p>
+    <div class="grade-operacao">
+      <button class="btn-operacao" style="background:#58cc02;" onclick="configPratica('+')">➕<span>Adição</span></button>
+      <button class="btn-operacao" style="background:#ff9600;" onclick="configPratica('-')">➖<span>Subtração</span></button>
+      <button class="btn-operacao" style="background:#4d96ff;" onclick="configPratica('x')">✖️<span>Multiplicação</span></button>
+      <button class="btn-operacao" style="background:#9b5de5;" onclick="configPratica('÷')">➗<span>Divisão</span></button>
+    </div>
+    <div id="area-pratica"></div>`;
+}
+function configPratica(op, tabuadaFixa){
+  mathOp=op; mathTabuadaFixa=tabuadaFixa||null; mathAcertos=0; mathErros=0;
+  const area=document.getElementById('area-pratica');
+  if(!area) return;
+  area.innerHTML=`<div class="math-cartao">
+    <div class="placar-math"><div class="verde">✅ <span id="math-acertos">0</span></div><div class="verm">❌ <span id="math-erros">0</span></div></div>
+    <div class="pergunta-math" id="math-pergunta"></div>
+    <div class="opcoes" id="math-opcoes"></div>
+    <div style="text-align:center;margin-top:12px;">
+      <button class="btn-mini" onclick="configPratica('${op}',${tabuadaFixa||'null'})">🔁 Reiniciar</button>
+      <button class="btn-mini" onclick="renderLicoesMat()">📚 Lições</button>
+    </div>
+  </div>`;
+  gerarPerguntaMat();
+}
+function gerarContaMat(op){
+  let a,b,pergunta,resp;
+  switch(op){
+    case '+': a=1+Math.floor(Math.random()*50); b=1+Math.floor(Math.random()*50); pergunta=a+' + '+b; resp=a+b; break;
+    case '-': a=5+Math.floor(Math.random()*45); b=1+Math.floor(Math.random()*a); pergunta=a+' − '+b; resp=a-b; break;
+    case 'x': a=mathTabuadaFixa||(2+Math.floor(Math.random()*9)); b=1+Math.floor(Math.random()*10); pergunta=a+' × '+b; resp=a*b; break;
+    case '÷': b=2+Math.floor(Math.random()*9); { const cc=1+Math.floor(Math.random()*10); a=b*cc; pergunta=a+' ÷ '+b; resp=cc; } break;
+  }
+  return {pergunta, resp};
+}
+function gerarOpcoesMat(resp){
+  const s=new Set([resp]);
+  while(s.size<4){
+    const desvio=1+Math.floor(Math.random()*10);
+    const cand=resp+(Math.random()>0.5?desvio:-desvio);
+    if(cand>=0 && !s.has(cand)) s.add(cand);
+  }
+  return embaralhar([...s]);
+}
+function gerarPerguntaMat(){
+  mathBloq=false;
+  const r=gerarContaMat(mathOp);
+  mathResp=r.resp;
+  document.getElementById('math-pergunta').textContent=r.pergunta+' = ?';
+  const g=document.getElementById('math-opcoes'); g.innerHTML='';
+  gerarOpcoesMat(r.resp).forEach(o=>{
+    const b=document.createElement('button'); b.className='opcao'; b.textContent=o;
+    b.onclick=()=>responderMat(o,b);
+    g.appendChild(b);
+  });
+}
+function responderMat(o,btn){
+  if(mathBloq) return;
+  mathBloq=true;
+  const botoes=document.querySelectorAll('#math-opcoes .opcao');
+  if(o===mathResp){
+    btn.classList.add('certa'); mathAcertos++;
+    document.getElementById('math-acertos').textContent=mathAcertos;
+    beepCerto(); addXP(2); falarPt('Muito bem!');
+    setMascote('Você acertou! 🧮😊');
+    if(mathAcertos%5===0) confete();
+    setTimeout(gerarPerguntaMat, 900);
+  } else {
+    btn.classList.add('errada');
+    botoes.forEach(b=>{ if(parseInt(b.textContent)===mathResp) b.classList.add('certa'); });
+    mathErros++; document.getElementById('math-erros').textContent=mathErros;
+    beepErro(); falarPt('A resposta certa é '+mathResp);
+    setMascote('Quase! A certa é '+mathResp+' 😉');
+    setTimeout(gerarPerguntaMat, 1600);
+  }
+}
+
+/* --- CORRIDA DA MENTE --- */
+function renderCorrida(){
+  pararMathTimer();
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="sairCorrida()">⬅️ Voltar</button></div>
+    <h2 style="text-align:center;color:#555;">⚡ Corrida da Mente</h2>
+    <p style="text-align:center;color:#999;font-weight:bold;margin-bottom:14px;">Responda o máximo em 60 segundos!</p>
+    <div class="math-cartao">
+      <div class="timer-math" id="math-timer">60</div>
+      <div class="pergunta-math" id="math-pergunta-v">3 × 4</div>
+      <div class="opcoes" id="math-opcoes-v"></div>
+      <div class="placar-math" style="margin-top:18px;"><div class="verde">✅ <span id="math-acertos-v">0</span></div></div>
+    </div>
+    <button class="btn btn-verde" style="width:100%;margin-top:12px;" onclick="renderCorrida()">🔁 Jogar de novo</button>`;
+  mathAcertos=0; mathSeg=60; mathTimerAtivo=true;
+  document.getElementById('math-timer').textContent='60';
+  gerarPerguntaCorrida();
+  mathTimer=setInterval(()=>{
+    mathSeg--;
+    const t=document.getElementById('math-timer');
+    if(t) t.textContent=mathSeg;
+    if(mathSeg<=10 && t) t.classList.add('urgente');
+    if(mathSeg<=0){
+      pararMathTimer();
+      mathBloq=true;
+      const pts=mathAcertos;
+      const best=parseInt(localStorage.getItem('ik_mathBest')||'0');
+      if(pts>best) localStorage.setItem('ik_mathBest', pts);
+      mostrarToast('⏰ Acabou! Você acertou '+pts+' contas! 🏆');
+      if(pts>0) addXP(pts);
+      verificarConquistas();
+      if(pts>=10) confete();
+      setMascote(pts>=10?'Incrível! 🏆':'Boa tentativa! 💪');
+      const p=document.getElementById('math-pergunta-v');
+      if(p) p.textContent='⏰ Fim! '+pts+' acertos';
+    }
+  },1000);
+}
+function sairCorrida(){ pararMathTimer(); renderMathMenu(); }
+function gerarPerguntaCorrida(){
+  if(!mathTimerAtivo) return;
+  mathBloq=false;
+  const tipos=['+','-','x'];
+  const op=tipos[Math.floor(Math.random()*3)];
+  const r=gerarContaMat(op);
+  mathResp=r.resp;
+  document.getElementById('math-pergunta-v').textContent=r.pergunta+' = ?';
+  const g=document.getElementById('math-opcoes-v'); g.innerHTML='';
+  gerarOpcoesMat(r.resp).forEach(o=>{
+    const b=document.createElement('button'); b.className='opcao'; b.textContent=o;
+    b.onclick=()=>responderCorrida(o,b);
+    g.appendChild(b);
+  });
+}
+function responderCorrida(o,btn){
+  if(mathBloq || mathSeg<=0) return;
+  if(o===mathResp){
+    btn.classList.add('certa'); mathAcertos++;
+    document.getElementById('math-acertos-v').textContent=mathAcertos;
+    beepCerto();
+    setTimeout(gerarPerguntaCorrida, 400);
+  } else {
+    btn.classList.add('errada');
+    beepErro();
+    setTimeout(()=>btn.classList.remove('errada'), 500);
+  }
+}
+function pararMathTimer(){ if(mathTimer){ clearInterval(mathTimer); mathTimer=null; } mathTimerAtivo=false; }
+
+/* --- JOGO DA MEMÓRIA --- */
+function renderMemoria(){
+  const c=document.getElementById('math-conteudo');
+  memPares=0; memVirada=null; memTravado=false;
+  const pares=[], usados={};
+  while(pares.length<6){
+    const a=2+Math.floor(Math.random()*9), b=2+Math.floor(Math.random()*9);
+    const chave=Math.min(a,b)+'x'+Math.max(a,b);
+    if(!usados[chave]){ usados[chave]=true; pares.push({pergunta:a+'×'+b, resp:String(a*b)}); }
+  }
+  memCartas=[];
+  pares.forEach((p,i)=>{ memCartas.push({texto:p.pergunta, par:i}); memCartas.push({texto:p.resp, par:i}); });
+  memCartas=embaralhar(memCartas);
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="renderMathMenu()">⬅️ Voltar</button></div>
+    <h2 style="text-align:center;color:#555;">🃏 Jogo da Memória</h2>
+    <p style="text-align:center;color:#999;font-weight:bold;margin-bottom:14px;" id="mem-info">Encontre o par: a conta com o resultado!</p>
+    <div class="grade-memoria" id="grade-memoria"></div>
+    <button class="btn btn-verde" style="width:100%;margin-top:16px;" onclick="renderMemoria()">🔄 Novo jogo</button>`;
+  const g=document.getElementById('grade-memoria');
+  memCartas.forEach((carta,idx)=>{
+    const b=document.createElement('button');
+    b.className='carta-memoria';
+    b.textContent='❓';
+    b.onclick=()=>virarCartaMat(idx,b);
+    g.appendChild(b);
+  });
+}
+function virarCartaMat(idx, btn){
+  if(memTravado || btn.classList.contains('virada') || btn.classList.contains('combinada')) return;
+  btn.classList.add('virada');
+  btn.textContent=memCartas[idx].texto;
+  if(!memVirada){
+    memVirada={idx, btn};
+  } else {
+    memTravado=true;
+    if(memVirada.idx!==idx && memCartas[memVirada.idx].par===memCartas[idx].par){
+      memVirada.btn.classList.add('combinada');
+      btn.classList.add('combinada');
+      memPares++;
+      beepCerto(); addXP(3); falarPt('Achou o par!');
+      memVirada=null; memTravado=false;
+      document.getElementById('mem-info').textContent='🎉 Pares: '+memPares+' de 6';
+      if(memPares===6){
+        mostrarToast('🏆 Você venceu! Parabéns!');
+        confete(); setMascote('Campeão! 🏆');
+      }
+    } else {
+      const c1=memVirada;
+      beepErro();
+      setTimeout(()=>{
+        c1.btn.classList.remove('virada'); c1.btn.textContent='❓';
+        btn.classList.remove('virada'); btn.textContent='❓';
+        memVirada=null; memTravado=false;
+      }, 900);
+    }
+  }
+}
+
+/* --- LIÇÕES DE MATEMÁTICA --- */
+function renderLicoesMat(){
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="renderMathMenu()">⬅️ Voltar</button></div>
+    <h2 style="text-align:center;color:#555;">📚 Lições</h2>
+    <p style="text-align:center;color:#999;font-weight:bold;margin-bottom:14px;">Aprenda os 4 tipos de conta!</p>
+    <div id="lista-licoes-mat"></div>`;
+  const lista=document.getElementById('lista-licoes-mat');
+  LICOES_MAT.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='cartao-licao-mat';
+    d.style.setProperty('--cor-licao', l.cor);
+    d.innerHTML='<div class="titulo-licao-mat">'+l.icone+' '+l.titulo+'</div><div class="resumo-licao-mat">'+l.resumo+'</div>';
+    d.onclick=()=>renderLicaoDetalheMat(l);
+    lista.appendChild(d);
+  });
+}
+function renderLicaoDetalheMat(l){
+  const c=document.getElementById('math-conteudo');
+  c.innerHTML=`<div class="math-voltar"><button class="btn-mini" onclick="renderLicoesMat()">⬅️ Voltar</button></div>
+    <div class="conteudo-licao-mat">
+      <h2 style="text-align:center;color:#555;">${l.icone} ${l.titulo}</h2>
+      ${l.conteudo}
+      <button class="btn" style="background:${l.cor};width:100%;margin-top:16px;" onclick="praticarLicaoMat('${l.id}')">🎯 Praticar agora!</button>
+    </div>`;
+}
+function praticarLicaoMat(id){
+  renderPratica();
+  configPratica(id);
+}
+
+/* ===================== INICIALIZAÇÃO ===================== */
+window.onload=function(){
+  carregarHearts();
+  if(nome){ document.getElementById('overlay-nome').style.display='none'; }
+  else { document.getElementById('overlay-nome').style.display='flex'; }
+  document.getElementById('input-nome').addEventListener('keydown', e=>{ if(e.key==='Enter') guardarNome(); });
+  atualizarHeader();
+  renderHome();
+  setInterval(criarParticula, 2200);
+  setMascote(nome ? ('Oi, '+nome+'! Vamos aprender? 🎉') : 'Bem-vindo! 🦉');
+};
+</script>
+</body>
+</html>
